@@ -6,7 +6,6 @@ class Battery
   def initialize(dev)
     @data = []
     @dev = dev
-    @pixbuf = Gdk::Pixbuf.new(Gdk::Pixbuf::COLORSPACE_RGB, false, 8, 48, 48)
   end
   
   def read_data
@@ -43,37 +42,35 @@ class Battery
     @data << h
   end
 
-  def draw(w)
+  def draw_all(pixbuf)
+    width = pixbuf.width
+    height = pixbuf.height
+    
     i = @data.length - 1
-    x = 47
+    x = width - 1
     while x >= 0
       if i >= 0
         h = @data[i]
         p h['capacity']
         
-        height = h['capacity'] * 48 / 100
+        len = h['capacity'] * height / 100
         
         if h['charging']
-          draw_line(@pixbuf, x, 0, 47, 0, 0x80, 0)
-          draw_line(@pixbuf, x, 47 - height + 1, 47, 0xff, 0x80, 0x80)
+          draw_line(pixbuf, x, 0, height - 1, 0, 0x80, 0)
+          draw_line(pixbuf, x, height - len, height - 1, 0xff, 0x80, 0x80)
         else
-          draw_line(@pixbuf, x, 0, 47, 0, 0, 0)
-          draw_line(@pixbuf, x, 47 - height + 1, 47, 0xff, 0, 0)
+          draw_line(pixbuf, x, 0, height - 1, 0, 0, 0)
+          draw_line(pixbuf, x, height - len, height - 1, 0xff, 0, 0)
         end
       else
         p 'no data.'
-        draw_line(@pixbuf, x, 0, 47, 0x80, 0x80, 0x80)
+        draw_line(pixbuf, x, 0, height - 1, 0x80, 0x80, 0x80)
       end
       
       x -= 1
       i -= 1
     end
-    
-    ctxt = w.window.create_cairo_context
-    ctxt.save do
-      ctxt.set_source_pixbuf(@pixbuf)
-      ctxt.paint
-    end
   end
+
 end
 

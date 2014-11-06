@@ -34,21 +34,29 @@ require './multimonitor/battery'
 
 ####
 
+width = 48
+height = 48
+
 toplevel = Gtk::Window.new("Multi Monitor")
 
 obj = Battery.new(0)
 
 drawable = Gtk::DrawingArea.new
-drawable.set_size_request(48, 48)
+drawable.set_size_request(width, height)
 toplevel.add(drawable)
-
-obj.read_data
 
 toplevel.show_all
 
 GLib::Timeout.add(1000) do
+  pixbuf = Gdk::Pixbuf.new(Gdk::Pixbuf::COLORSPACE_RGB, false, 8, width, height)
   obj.read_data
-  obj.draw(drawable)
+  obj.draw_all(pixbuf)
+
+  ctxt = drawable.window.create_cairo_context
+  ctxt.save do
+    ctxt.set_source_pixbuf(pixbuf)
+    ctxt.paint
+  end
 end
 
 Gtk.main
