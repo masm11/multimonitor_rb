@@ -71,6 +71,10 @@ class Battery
       i -= 1
     end
   end
-
+  
+  def get_label
+    "Battery\nBAT #{@dev}"
+  end
+  
 end
 

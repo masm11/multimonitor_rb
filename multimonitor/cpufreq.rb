@@ -60,5 +60,8 @@ class CPUFreq
     end
   end
 
+  def get_label
+    "CPU Freq\nCPU #{@dev}"
+  end
 end
 

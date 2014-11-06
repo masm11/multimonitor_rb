@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# coding: utf-8
 
 require 'gtk3'
 
@@ -6,11 +7,12 @@ require './multimonitor/draw'
 require './multimonitor/battery'
 require './multimonitor/cpufreq'
 
-# --width 48
-# --height 48
 # --vertical
 # --horizontal
+# --width 48
+# --height 48
 # --font 'sans 8'
+#
 # --battery 0
 # --battery 1
 # --cpufreq 0
@@ -35,57 +37,104 @@ require './multimonitor/cpufreq'
 
 ####
 
+class Device
+  @dev = nil
+  def dev=(dev)
+    @dev = dev
+  end
+  def dev
+    @dev
+  end
+  
+  @drawable = nil
+  def drawable=(drawable)
+    @drawable = drawable
+  end
+  def drawable
+    @drawable
+  end
+  
+  @layout = nil
+  def layout=(layout)
+    @layout = layout
+  end
+  def layout
+    @layout
+  end
+  
+  @pixbuf = nil
+  def pixbuf=(pixbuf)
+    @pixbuf = pixbuf
+  end
+  def pixbuf
+    @pixbuf
+  end
+end
+
 width = 48
 height = 48
+font = 'sans 8'
 
 toplevel = Gtk::Window.new("Multi Monitor")
 
 box = Gtk::Box.new(:horizontal, 1)
 toplevel.add(box)
 
-obj = Battery.new(0)
-obj2 = CPUFreq.new(0)
+fontdesc = Pango::FontDescription.new(font)
 
-drawable = Gtk::DrawingArea.new
-drawable.set_size_request(width, height)
-box.add(drawable)
+devices = []
 
-drawable2 = Gtk::DrawingArea.new
-drawable2.set_size_request(width, height)
-box.add(drawable2)
-
-fontdesc = Pango::FontDescription.new('sans 8')
-layout = drawable.create_pango_layout
-layout.markup = "<span foreground='white'>Battery\nBAT 0</span>"
-layout.font_description = fontdesc
-layout2 = drawable2.create_pango_layout
-layout2.markup = "<span foreground='white'>CPU Freq\nCPU 0</span>"
-layout2.font_description = fontdesc
+i = 0
+while i < ARGV.length
+  case ARGV[i]
+  when '--battery'
+    i += 1
+    dev = Device.new
+    dev.dev = Battery.new(ARGV[i])
+    i += 1
+  when '--cpufreq'
+    i += 1
+    dev = Device.new
+    dev.dev = CPUFreq.new(ARGV[i])
+    i += 1
+  else
+    $stderr.puts('unknown args.')
+    exit(1)
+  end
+  
+  dev.drawable = Gtk::DrawingArea.new
+  dev.drawable.set_size_request(width, height)
+  box.add(dev.drawable)
+  
+  dev.layout = dev.drawable.create_pango_layout
+  dev.layout.markup = "<span foreground='white'>" + dev.dev.get_label + "</span>"
+  dev.layout.font_description = fontdesc
+  
+  devices << dev
+end
 
 toplevel.show_all
 
 GLib::Timeout.add(1000) do
-  pixbuf = Gdk::Pixbuf.new(Gdk::Pixbuf::COLORSPACE_RGB, false, 8, width, height)
-  obj.read_data
-  obj.draw_all(pixbuf)
+  i = 0
+  while i < devices.length
+    dev = devices[i]
+    
+    pixbuf = Gdk::Pixbuf.new(Gdk::Pixbuf::COLORSPACE_RGB, false, 8, width, height)
+    dev.dev.read_data
+    dev.dev.draw_all(pixbuf)
+    
+    ctxt = dev.drawable.window.create_cairo_context
+    ctxt.save do
+      ctxt.set_source_pixbuf(pixbuf)
+      ctxt.paint
+    end
+    ctxt.show_pango_layout(dev.layout)
 
-  ctxt = drawable.window.create_cairo_context
-  ctxt.save do
-    ctxt.set_source_pixbuf(pixbuf)
-    ctxt.paint
+    i += 1
   end
-  ctxt.show_pango_layout(layout)
   
-  pixbuf = Gdk::Pixbuf.new(Gdk::Pixbuf::COLORSPACE_RGB, false, 8, width, height)
-  obj2.read_data
-  obj2.draw_all(pixbuf)
-
-  ctxt = drawable2.window.create_cairo_context
-  ctxt.save do
-    ctxt.set_source_pixbuf(pixbuf)
-    ctxt.paint
-  end
-  ctxt.show_pango_layout(layout2)
+  true
 end
 
 Gtk.main
