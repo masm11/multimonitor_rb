@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 def draw_line(pixbuf, x, y1, y2, r, g, b)
-  p 'draw_line'
+#  p 'draw_line'
   rowstride = pixbuf.rowstride
   pixels = pixbuf.pixels;
   

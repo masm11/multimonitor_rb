@@ -4,6 +4,7 @@ require 'gtk3'
 
 require './multimonitor/draw'
 require './multimonitor/battery'
+require './multimonitor/cpufreq'
 
 # --width 48
 # --height 48
@@ -39,11 +40,19 @@ height = 48
 
 toplevel = Gtk::Window.new("Multi Monitor")
 
+box = Gtk::Box.new(:horizontal, 1)
+toplevel.add(box)
+
 obj = Battery.new(0)
+obj2 = CPUFreq.new(0)
 
 drawable = Gtk::DrawingArea.new
 drawable.set_size_request(width, height)
-toplevel.add(drawable)
+box.add(drawable)
+
+drawable2 = Gtk::DrawingArea.new
+drawable2.set_size_request(width, height)
+box.add(drawable2)
 
 toplevel.show_all
 
@@ -53,6 +62,16 @@ GLib::Timeout.add(1000) do
   obj.draw_all(pixbuf)
 
   ctxt = drawable.window.create_cairo_context
+  ctxt.save do
+    ctxt.set_source_pixbuf(pixbuf)
+    ctxt.paint
+  end
+
+  pixbuf = Gdk::Pixbuf.new(Gdk::Pixbuf::COLORSPACE_RGB, false, 8, width, height)
+  obj2.read_data
+  obj2.draw_all(pixbuf)
+
+  ctxt = drawable2.window.create_cairo_context
   ctxt.save do
     ctxt.set_source_pixbuf(pixbuf)
     ctxt.paint
