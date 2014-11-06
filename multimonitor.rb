@@ -54,6 +54,14 @@ drawable2 = Gtk::DrawingArea.new
 drawable2.set_size_request(width, height)
 box.add(drawable2)
 
+fontdesc = Pango::FontDescription.new('sans 8')
+layout = drawable.create_pango_layout
+layout.markup = "<span foreground='white'>Battery\nBAT 0</span>"
+layout.font_description = fontdesc
+layout2 = drawable2.create_pango_layout
+layout2.markup = "<span foreground='white'>CPU Freq\nCPU 0</span>"
+layout2.font_description = fontdesc
+
 toplevel.show_all
 
 GLib::Timeout.add(1000) do
@@ -66,7 +74,8 @@ GLib::Timeout.add(1000) do
     ctxt.set_source_pixbuf(pixbuf)
     ctxt.paint
   end
-
+  ctxt.show_pango_layout(layout)
+  
   pixbuf = Gdk::Pixbuf.new(Gdk::Pixbuf::COLORSPACE_RGB, false, 8, width, height)
   obj2.read_data
   obj2.draw_all(pixbuf)
@@ -76,6 +85,7 @@ GLib::Timeout.add(1000) do
     ctxt.set_source_pixbuf(pixbuf)
     ctxt.paint
   end
+  ctxt.show_pango_layout(layout2)
 end
 
 Gtk.main
