@@ -35,7 +35,28 @@ class CPUFreq
     
     @data << freq
   end
-
+  
+  def draw_1(pixbuf)
+    width = pixbuf.width
+    height = pixbuf.height
+    
+    draw_shift(pixbuf)
+    
+    i = @data.length - 1
+    x = width - 1
+    
+    if @max_freq > 0 && i >= 0 && @data[i] > 0
+      freq = @data[i]
+      
+      len = freq * height / @max_freq
+      
+      draw_line(pixbuf, x, 0, height - 1, 0, 0, 0)
+      draw_line(pixbuf, x, height - len, height - 1, 0xff, 0x00, 0x00)
+    else
+      draw_line(pixbuf, x, 0, height - 1, 0x80, 0x80, 0x80)
+    end
+  end
+  
   def draw_all(pixbuf)
     width = pixbuf.width
     height = pixbuf.height

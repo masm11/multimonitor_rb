@@ -150,6 +150,7 @@ for dev in devices
   dev.layout.font_description = fontdesc
   
   dev.pixbuf = Gdk::Pixbuf.new(Gdk::Pixbuf::COLORSPACE_RGB, false, 8, width, height)
+  draw_clear(dev.pixbuf)
 end
 
 toplevel.show_all
@@ -162,7 +163,7 @@ GLib::Timeout.add(250) do
     
     if tick_count % dev.dev.get_tick_per_draw == 0
       dev.dev.read_data
-      dev.dev.draw_all(dev.pixbuf)
+      dev.dev.draw_1(dev.pixbuf)
       
       ctxt = dev.drawable.window.create_cairo_context
       ctxt.save do

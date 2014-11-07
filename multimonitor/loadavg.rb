@@ -31,11 +31,8 @@ class LoadAvg
     
     @data << loadavg
   end
-
-  def draw_all(pixbuf)
-    width = pixbuf.width
-    height = pixbuf.height
-
+  
+  def calc_max
     max = 1.0
     for i in 0...@data.length
       if @data[i] > max
@@ -43,7 +40,47 @@ class LoadAvg
       end
     end
     
-    max = max.ceil
+    max.ceil
+  end
+  
+  def draw_1(pixbuf)
+    width = pixbuf.width
+    height = pixbuf.height
+
+    max = calc_max
+    if max != @oldmax
+      draw_all(pixbuf)
+      return
+    end
+    
+    draw_shift(pixbuf)
+    
+    i = @data.length - 1
+    x = width - 1
+    
+    if i >= 0 && @data[i] > 0
+      loadavg = @data[i]
+      
+      len = loadavg * height / max
+      
+      draw_line(pixbuf, x, 0, height - 1, 0, 0, 0)
+      draw_line(pixbuf, x, height - len, height - 1, 0xff, 0x00, 0x00)
+      
+      for h in 1...max
+        y = h * height / max
+        draw_line(pixbuf, x, y, y, 0xff, 0xff, 0xff)
+      end
+    else
+      draw_line(pixbuf, x, 0, height - 1, 0x80, 0x80, 0x80)
+    end
+  end
+  
+  def draw_all(pixbuf)
+    width = pixbuf.width
+    height = pixbuf.height
+
+    max = calc_max
+    @old_max = max
     
     i = @data.length - 1
     x = width - 1

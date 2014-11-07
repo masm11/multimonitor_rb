@@ -41,7 +41,33 @@ class Battery
     
     @data << h
   end
-
+  
+  def draw_1(pixbuf)
+    width = pixbuf.width
+    height = pixbuf.height
+    
+    draw_shift(pixbuf)
+    
+    i = @data.length - 1
+    x = width - 1
+    
+    if i >= 0 && @data[i]
+      h = @data[i]
+      
+      len = h['capacity'] * height / 100
+      
+      if h['charging']
+        draw_line(pixbuf, x, 0, height - 1, 0, 0x80, 0)
+        draw_line(pixbuf, x, height - len, height - 1, 0xff, 0x80, 0x80)
+      else
+        draw_line(pixbuf, x, 0, height - 1, 0, 0, 0)
+        draw_line(pixbuf, x, height - len, height - 1, 0xff, 0, 0)
+      end
+    else
+      draw_line(pixbuf, x, 0, height - 1, 0x80, 0x80, 0x80)
+    end
+  end
+  
   def draw_all(pixbuf)
     width = pixbuf.width
     height = pixbuf.height
@@ -49,7 +75,7 @@ class Battery
     i = @data.length - 1
     x = width - 1
     while x >= 0
-      if i >= 0
+      if i >= 0 && @data[i]
         h = @data[i]
 #        p h['capacity']
         
