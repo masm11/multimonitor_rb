@@ -56,6 +56,11 @@ class LoadAvg
         
         draw_line(pixbuf, x, 0, height - 1, 0, 0, 0)
         draw_line(pixbuf, x, height - len, height - 1, 0xff, 0x00, 0x00)
+
+        for h in 1...max
+          y = h * height / max
+          draw_line(pixbuf, x, y, y, 0xff, 0xff, 0xff)
+        end
       else
         draw_line(pixbuf, x, 0, height - 1, 0x80, 0x80, 0x80)
       end
