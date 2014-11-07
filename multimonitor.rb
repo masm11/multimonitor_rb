@@ -144,25 +144,30 @@ end
 
 toplevel.show_all
 
-GLib::Timeout.add(1000) do
+tick_count = 0
+
+GLib::Timeout.add(250) do
   i = 0
   while i < devices.length
     dev = devices[i]
     
-    pixbuf = Gdk::Pixbuf.new(Gdk::Pixbuf::COLORSPACE_RGB, false, 8, width, height)
-    dev.dev.read_data
-    dev.dev.draw_all(pixbuf)
-    
-    ctxt = dev.drawable.window.create_cairo_context
-    ctxt.save do
-      ctxt.set_source_pixbuf(pixbuf)
-      ctxt.paint
+    if tick_count % dev.dev.get_tick_per_draw == 0
+      pixbuf = Gdk::Pixbuf.new(Gdk::Pixbuf::COLORSPACE_RGB, false, 8, width, height)
+      dev.dev.read_data
+      dev.dev.draw_all(pixbuf)
+      
+      ctxt = dev.drawable.window.create_cairo_context
+      ctxt.save do
+        ctxt.set_source_pixbuf(pixbuf)
+        ctxt.paint
+      end
+      ctxt.show_pango_layout(dev.layout)
     end
-    ctxt.show_pango_layout(dev.layout)
-
+    
     i += 1
   end
   
+  tick_count += 1
   true
 end
 

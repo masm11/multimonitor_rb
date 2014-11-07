@@ -51,7 +51,7 @@ class Battery
     while x >= 0
       if i >= 0
         h = @data[i]
-        p h['capacity']
+#        p h['capacity']
         
         len = h['capacity'] * height / 100
         
@@ -63,7 +63,7 @@ class Battery
           draw_line(pixbuf, x, height - len, height - 1, 0xff, 0, 0)
         end
       else
-        p 'no data.'
+#        p 'no data.'
         draw_line(pixbuf, x, 0, height - 1, 0x80, 0x80, 0x80)
       end
       
@@ -74,6 +74,10 @@ class Battery
   
   def get_label
     "Battery\nBAT #{@dev}"
+  end
+  
+  def get_tick_per_draw
+    16
   end
   
 end

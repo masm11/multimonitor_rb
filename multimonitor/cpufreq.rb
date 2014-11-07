@@ -45,7 +45,7 @@ class CPUFreq
     while x >= 0
       if @max_freq > 0 && i >= 0 && @data[i] > 0
         freq = @data[i]
-        p freq
+#        p freq
         
         len = freq * height / @max_freq
         
@@ -63,5 +63,10 @@ class CPUFreq
   def get_label
     "CPU Freq\nCPU #{@dev}"
   end
+  
+  def get_tick_per_draw
+    1
+  end
+  
 end
 
