@@ -5,7 +5,7 @@ def draw_line(pixbuf, x, y1, y2, r, g, b)
   rowstride = pixbuf.rowstride
   pixels = pixbuf.pixels;
   
-  for y in y1..y2
+  for y in y1.to_i..y2.to_i
     p = y * rowstride + x * 3
     pixels[p..p+2] = [ r, g, b ].pack('C3')
   end

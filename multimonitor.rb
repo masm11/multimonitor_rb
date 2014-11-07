@@ -6,6 +6,7 @@ require 'gtk3'
 require './multimonitor/draw'
 require './multimonitor/battery'
 require './multimonitor/cpufreq'
+require './multimonitor/loadavg'
 
 # --vertical
 # --horizontal
@@ -117,6 +118,13 @@ while i < ARGV.length
     i += 1
     dev = Device.new
     dev.dev = CPUFreq.new(ARGV[i])
+    devices << dev
+    i += 1
+
+  when '--loadavg'
+    i += 1
+    dev = Device.new
+    dev.dev = LoadAvg.new(ARGV[i])
     devices << dev
     i += 1
     
