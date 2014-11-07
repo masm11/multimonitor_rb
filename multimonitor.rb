@@ -80,28 +80,50 @@ toplevel = Gtk::Window.new("Multi Monitor")
 box = Gtk::Box.new(:horizontal, 1)
 toplevel.add(box)
 
-fontdesc = Pango::FontDescription.new(font)
-
 devices = []
 
 i = 0
 while i < ARGV.length
   case ARGV[i]
+  when '--width'
+    i += 1
+    width = ARGV[i].to_i
+    i += 1
+    
+  when '--height'
+    i += 1
+    height = ARGV[i].to_i
+    i += 1
+
+  when '--font'
+    i += 1
+    font = ARGV[i]
+    i += 1
+    
   when '--battery'
     i += 1
     dev = Device.new
     dev.dev = Battery.new(ARGV[i])
+    devices << dev
     i += 1
+    
   when '--cpufreq'
     i += 1
     dev = Device.new
     dev.dev = CPUFreq.new(ARGV[i])
+    devices << dev
     i += 1
+    
   else
     $stderr.puts('unknown args.')
     exit(1)
   end
   
+end
+
+fontdesc = Pango::FontDescription.new(font)
+
+for dev in devices
   dev.drawable = Gtk::DrawingArea.new
   dev.drawable.set_size_request(width, height)
   box.add(dev.drawable)
@@ -109,8 +131,6 @@ while i < ARGV.length
   dev.layout = dev.drawable.create_pango_layout
   dev.layout.markup = "<span foreground='white'>" + dev.dev.get_label + "</span>"
   dev.layout.font_description = fontdesc
-  
-  devices << dev
 end
 
 toplevel.show_all
