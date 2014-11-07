@@ -7,6 +7,7 @@ require './multimonitor/draw'
 require './multimonitor/battery'
 require './multimonitor/cpufreq'
 require './multimonitor/loadavg'
+require './multimonitor/cpuload'
 
 # --vertical
 # --horizontal
@@ -125,6 +126,13 @@ while i < ARGV.length
     i += 1
     dev = Device.new
     dev.dev = LoadAvg.new(ARGV[i])
+    devices << dev
+    i += 1
+
+  when '--cpuload'
+    i += 1
+    dev = Device.new
+    dev.dev = CPULoad.new(ARGV[i])
     devices << dev
     i += 1
     
