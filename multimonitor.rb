@@ -74,11 +74,9 @@ end
 width = 48
 height = 48
 font = 'sans 8'
+orientation = :horizontal
 
 toplevel = Gtk::Window.new("Multi Monitor")
-
-box = Gtk::Box.new(:horizontal, 1)
-toplevel.add(box)
 
 devices = []
 
@@ -99,6 +97,14 @@ while i < ARGV.length
     i += 1
     font = ARGV[i]
     i += 1
+
+  when '--vertical'
+    i += 1
+    orientation = :vertical
+
+  when '--horizontal'
+    i += 1
+    orientation = :horizontal
     
   when '--battery'
     i += 1
@@ -120,6 +126,9 @@ while i < ARGV.length
   end
   
 end
+
+box = Gtk::Box.new(orientation, 1)
+toplevel.add(box)
 
 fontdesc = Pango::FontDescription.new(font)
 
