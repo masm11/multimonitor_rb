@@ -148,6 +148,8 @@ for dev in devices
   dev.layout = dev.drawable.create_pango_layout
   dev.layout.markup = "<span foreground='white'>" + dev.dev.get_label + "</span>"
   dev.layout.font_description = fontdesc
+  
+  dev.pixbuf = Gdk::Pixbuf.new(Gdk::Pixbuf::COLORSPACE_RGB, false, 8, width, height)
 end
 
 toplevel.show_all
@@ -155,24 +157,20 @@ toplevel.show_all
 tick_count = 0
 
 GLib::Timeout.add(250) do
-  i = 0
-  while i < devices.length
+  for i in 0...devices.length
     dev = devices[i]
     
     if tick_count % dev.dev.get_tick_per_draw == 0
-      pixbuf = Gdk::Pixbuf.new(Gdk::Pixbuf::COLORSPACE_RGB, false, 8, width, height)
       dev.dev.read_data
-      dev.dev.draw_all(pixbuf)
+      dev.dev.draw_all(dev.pixbuf)
       
       ctxt = dev.drawable.window.create_cairo_context
       ctxt.save do
-        ctxt.set_source_pixbuf(pixbuf)
+        ctxt.set_source_pixbuf(dev.pixbuf)
         ctxt.paint
       end
       ctxt.show_pango_layout(dev.layout)
     end
-    
-    i += 1
   end
   
   tick_count += 1
