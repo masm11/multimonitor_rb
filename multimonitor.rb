@@ -87,12 +87,11 @@ def draw_dev (dev)
   ctxt.show_pango_layout(dev.layout)
 end
 
+geometry = nil
 width = 48
 height = 48
 font = 'sans 8'
 orientation = :horizontal
-
-toplevel = Gtk::Window.new("Multi Monitor")
 
 devices = []
 d2d = {}	# drawable to device
@@ -100,6 +99,11 @@ d2d = {}	# drawable to device
 i = 0
 while i < ARGV.length
   case ARGV[i]
+  when '--geometry'
+    i += 1
+    geometry = ARGV[i]
+    i += 1
+    
   when '--width'
     i += 1
     width = ARGV[i].to_i
@@ -192,6 +196,8 @@ while i < ARGV.length
   
 end
 
+toplevel = Gtk::Window.new("Multi Monitor")
+
 box = Gtk::Box.new(orientation, 1)
 toplevel.add(box)
 
@@ -214,7 +220,13 @@ for dev in devices
   draw_clear(dev.pixbuf)
 end
 
-toplevel.show_all
+box.show_all
+
+if geometry
+  toplevel.parse_geometry(geometry)
+end
+
+toplevel.show
 
 tick_count = 0
 
