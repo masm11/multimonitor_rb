@@ -72,6 +72,9 @@ multimonitor.rb --battery 0
   --horizontal
     グラフを指定した順に横に並べます。
 
+  --geometry <position>
+    表示位置を指定します。
+
 ☆使用条件・著作権
 
   GPL3 です。COPYING を参照してください。
