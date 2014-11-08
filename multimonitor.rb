@@ -8,6 +8,7 @@ require './multimonitor/battery'
 require './multimonitor/cpufreq'
 require './multimonitor/loadavg'
 require './multimonitor/cpuload'
+require './multimonitor/network'
 
 # --vertical
 # --horizontal
@@ -73,6 +74,15 @@ class Device
   end
 end
 
+def draw_dev (dev)
+  ctxt = dev.drawable.window.create_cairo_context
+  ctxt.save do
+    ctxt.set_source_pixbuf(dev.pixbuf)
+    ctxt.paint
+  end
+  ctxt.show_pango_layout(dev.layout)
+end
+
 width = 48
 height = 48
 font = 'sans 8'
@@ -135,6 +145,13 @@ while i < ARGV.length
     dev.dev = CPULoad.new(ARGV[i])
     devices << dev
     i += 1
+
+  when '--network'
+    i += 1
+    dev = Device.new
+    dev.dev = Network.new(ARGV[i])
+    devices << dev
+    i += 1
     
   else
     $stderr.puts('unknown args.')
@@ -172,13 +189,7 @@ GLib::Timeout.add(250) do
     if tick_count % dev.dev.get_tick_per_draw == 0
       dev.dev.read_data
       dev.dev.draw_1(dev.pixbuf)
-      
-      ctxt = dev.drawable.window.create_cairo_context
-      ctxt.save do
-        ctxt.set_source_pixbuf(dev.pixbuf)
-        ctxt.paint
-      end
-      ctxt.show_pango_layout(dev.layout)
+      draw_dev(dev)
     end
   end
   
