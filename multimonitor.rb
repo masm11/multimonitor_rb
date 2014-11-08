@@ -92,6 +92,7 @@ orientation = :horizontal
 toplevel = Gtk::Window.new("Multi Monitor")
 
 devices = []
+d2d = {}	# drawable to device
 
 i = 0
 while i < ARGV.length
@@ -175,6 +176,10 @@ fontdesc = Pango::FontDescription.new(font)
 for dev in devices
   dev.drawable = Gtk::DrawingArea.new
   dev.drawable.set_size_request(width, height)
+  dev.drawable.signal_connect('draw') do |w|
+    draw_dev(d2d[w])
+  end
+  d2d[dev.drawable] = dev
   box.add(dev.drawable)
   
   dev.layout = dev.drawable.create_pango_layout
