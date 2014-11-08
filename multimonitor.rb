@@ -10,6 +10,9 @@ require './multimonitor/loadavg'
 require './multimonitor/cpuload'
 require './multimonitor/network'
 require './multimonitor/memory'
+require './multimonitor/swap'
+require './multimonitor/disk'
+require './multimonitor/temp'
 
 # --vertical
 # --horizontal
@@ -160,6 +163,27 @@ while i < ARGV.length
     dev = Device.new
     dev.dev = Memory.new
     devices << dev
+
+  when '--swap'
+    i += 1
+    dev = Device.new
+    dev.dev = Swap.new(ARGV[i])
+    devices << dev
+    i += 1
+
+  when '--disk'
+    i += 1
+    dev = Device.new
+    dev.dev = Disk.new(ARGV[i])
+    devices << dev
+    i += 1
+
+  when '--temp'
+    i += 1
+    dev = Device.new
+    dev.dev = Temp.new(ARGV[i])
+    devices << dev
+    i += 1
     
   else
     $stderr.puts('unknown args.')
