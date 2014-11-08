@@ -9,6 +9,7 @@ require './multimonitor/cpufreq'
 require './multimonitor/loadavg'
 require './multimonitor/cpuload'
 require './multimonitor/network'
+require './multimonitor/memory'
 
 # --vertical
 # --horizontal
@@ -152,6 +153,12 @@ while i < ARGV.length
     dev.dev = Network.new(ARGV[i])
     devices << dev
     i += 1
+
+  when '--memory'
+    i += 1
+    dev = Device.new
+    dev.dev = Memory.new
+    devices << dev
     
   else
     $stderr.puts('unknown args.')
