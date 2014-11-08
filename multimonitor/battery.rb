@@ -117,7 +117,7 @@ class Battery
     return nil unless h
     sprintf("%d%%\n%scharging",
             h['capacity'],
-            h['charging'] ? 'dis' : '')
+            h['charging'] ? '' : 'dis')
   end
 end
 
