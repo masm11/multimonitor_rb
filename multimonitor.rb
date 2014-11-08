@@ -3,16 +3,16 @@
 
 require 'gtk3'
 
-require './multimonitor/draw'
-require './multimonitor/battery'
-require './multimonitor/cpufreq'
-require './multimonitor/loadavg'
-require './multimonitor/cpuload'
-require './multimonitor/network'
-require './multimonitor/memory'
-require './multimonitor/swap'
-require './multimonitor/disk'
-require './multimonitor/temp'
+require_relative 'multimonitor/draw'
+require_relative 'multimonitor/battery'
+require_relative 'multimonitor/cpufreq'
+require_relative 'multimonitor/loadavg'
+require_relative 'multimonitor/cpuload'
+require_relative 'multimonitor/network'
+require_relative 'multimonitor/memory'
+require_relative 'multimonitor/swap'
+require_relative 'multimonitor/disk'
+require_relative 'multimonitor/temp'
 
 # --vertical
 # --horizontal
@@ -197,6 +197,7 @@ while i < ARGV.length
 end
 
 toplevel = Gtk::Window.new("Multi Monitor")
+toplevel.set_wmclass('multimonitor', 'MultiMonitor')
 
 box = Gtk::Box.new(orientation, 1)
 toplevel.add(box)

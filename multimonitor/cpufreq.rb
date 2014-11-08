@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require './multimonitor/draw'
+require_relative 'draw'
 
 class CPUFreq
   def initialize(dev)

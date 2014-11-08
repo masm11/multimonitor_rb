@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # coding: utf-8
 
-require './multimonitor/draw'
+require_relative 'draw'
 
 class Disk
   def initialize(dev)

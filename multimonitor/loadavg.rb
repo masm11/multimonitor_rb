@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require './multimonitor/draw'
+require_relative 'draw'
 
 class LoadAvg
   def initialize(dev)
