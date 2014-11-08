@@ -150,5 +150,11 @@ class Disk
     4
   end
   
+  def discard_data(maxlen)
+    if @data.length > maxlen
+      @data.slice!(0, @data.length - maxlen)
+    end
+  end
+  
 end
 

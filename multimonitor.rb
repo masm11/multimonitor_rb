@@ -224,6 +224,7 @@ GLib::Timeout.add(250) do
     
     if tick_count % dev.dev.get_tick_per_draw == 0
       dev.dev.read_data
+      dev.dev.discard_data(width)
       dev.dev.draw_1(dev.pixbuf)
       draw_dev(dev)
     end
