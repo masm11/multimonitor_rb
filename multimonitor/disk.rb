@@ -156,5 +156,18 @@ class Disk
     end
   end
   
+  def bps_text(bps)
+    return sprintf('%.1fGB/s', bps / 1000000000.0) if bps >= 1000000000
+    return sprintf('%.1fMB/s', bps / 1000000.0) if bps >= 1000000
+    return sprintf('%.1fKB/s', bps / 1000.0) if bps >= 1000
+    return sprintf('%.1fB/s', bps)
+  end
+  
+  def get_tooltip_text
+    h = @data[@data.length - 1]
+    return nil unless h
+    sprintf("Write:%s\nRead:%s",
+            bps_text(h['w']), bps_text(h['r']))
+  end
 end
 

@@ -98,6 +98,17 @@ class Swap
       @data.slice!(0, @data.length - maxlen)
     end
   end
+
+  def size_text(size)
+    return sprintf('%.1fGB', size / 1024.0 / 1024) if size >= 1024 * 1024
+    return sprintf('%.1fMB', size / 1024.0) if size >= 1024
+    return sprintf('%dKB', size)
+  end
   
+  def get_tooltip_text
+    used = @data[@data.length - 1]
+    return nil unless used > 0
+    size_text(used)
+  end
 end
 

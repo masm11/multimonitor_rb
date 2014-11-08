@@ -91,6 +91,11 @@ class Temp
       @data.slice!(0, @data.length - maxlen)
     end
   end
-  
+
+  def get_tooltip_text
+    temp = @data[@data.length - 1]
+    return nil unless temp
+    sprintf('%.1fC', temp)
+  end
 end
 

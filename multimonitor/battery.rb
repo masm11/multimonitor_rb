@@ -112,5 +112,12 @@ class Battery
     end
   end
   
+  def get_tooltip_text
+    h = @data[@data.length - 1]
+    return nil unless h
+    sprintf("%d%%\n%scharging",
+            h['capacity'],
+            h['charging'] ? 'dis' : '')
+  end
 end
 

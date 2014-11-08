@@ -95,5 +95,14 @@ class CPUFreq
     end
   end
   
+  def get_tooltip_text
+    freq = @data[@data.length - 1]
+    return nil unless freq > 0
+    if freq >= 1000000
+      sprintf('%.1fGHz', freq / 1000000.0)
+    else
+      sprintf('%dMHz', freq / 1000)
+    end
+  end
 end
 

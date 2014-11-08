@@ -58,7 +58,7 @@ class LoadAvg
     i = @data.length - 1
     x = width - 1
     
-    if i >= 0 && @data[i] > 0
+    if i >= 0 && @data[i] >= 0
       loadavg = @data[i]
       
       len = loadavg * height / max
@@ -86,7 +86,7 @@ class LoadAvg
     x = width - 1
     
     while x >= 0
-      if i >= 0 && @data[i] > 0
+      if i >= 0 && @data[i] >= 0
         loadavg = @data[i]
         
         len = loadavg * height / max
@@ -121,5 +121,10 @@ class LoadAvg
     end
   end
   
+  def get_tooltip_text
+    loadavg = @data[@data.length - 1]
+    return nil unless loadavg >= 0
+    sprintf('%.1f%%', loadavg * 100)
+  end
 end
 

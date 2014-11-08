@@ -110,4 +110,9 @@ class CPULoad
     end
   end
   
+  def get_tooltip_text
+    load = @data[@data.length - 1]
+    return nil unless load >= 0
+    sprintf('%.1f%%', load * 100)
+  end
 end

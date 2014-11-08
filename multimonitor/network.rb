@@ -180,5 +180,16 @@ class Network
     end
   end
   
+  def bps_text(bps)
+    return sprintf('%.1fGbps', bps / 1000000000.0) if bps >= 1000000000
+    return sprintf('%.1fMbps', bps / 1000000.0) if bps >= 1000000
+    return sprintf('%.1fKbps', bps / 1000.0) if bps >= 1000
+    return sprintf('%.1fbps', bps)
+  end
+  
+  def get_tooltip_text
+    h = @data[@data.length - 1]
+    return nil unless h
+    sprintf("Tx:%s\nRx:%s", bps_text(h['tx']), bps_text(h['rx']))
+  end
 end
-

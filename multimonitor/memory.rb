@@ -120,6 +120,21 @@ class Memory
       @data.slice!(0, @data.length - maxlen)
     end
   end
+
+  def size_text(size)
+    return sprintf('%.1fGB', size / 1024.0 / 1024) if size >= 1024 * 1024
+    return sprintf('%.1fMB', size / 1024.0) if size >= 1024
+    return sprintf('%dKB', size)
+  end
   
+  def get_tooltip_text
+    h = @data[@data.length - 1]
+    return nil unless h
+    sprintf("Anon:%s\nBuffers:%s\nCached:%s\nKernel:%s",
+            size_text(h['anon']),
+            size_text(h['buffers']),
+            size_text(h['cached']),
+            size_text(h['kernel']))
+  end
 end
 
