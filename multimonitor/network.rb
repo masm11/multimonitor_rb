@@ -18,6 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require_relative 'draw'
+require 'network_interface'
 
 class Network
   def initialize(dev)
@@ -203,9 +204,29 @@ class Network
     return sprintf('%.1fbps', bps)
   end
   
+  def get_addresses
+    hash = NetworkInterface::addresses(@dev)
+    addresses = []
+    for family in hash.keys.sort
+      mult = hash[family]
+      for a in mult
+        addresses << a['addr']
+      end
+    end
+    addresses
+  end
+  
   def get_tooltip_text
+    text = ''
+    delim = ''
+    for addr in get_addresses
+      text += delim + addr
+      delim = "\n"
+    end
     h = @data[@data.length - 1]
-    return nil unless h
-    sprintf("Tx:%s\nRx:%s", bps_text(h['tx']), bps_text(h['rx']))
+    if h
+      text += sprintf("\nTx:%s\nRx:%s", bps_text(h['tx']), bps_text(h['rx']))
+    end
+    text
   end
 end

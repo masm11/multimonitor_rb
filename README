@@ -7,18 +7,22 @@ Xfce4 Panel Plugin ではなくなりました。
 
 ☆インストール
 
-~/bin などにコピーしてください。
+gem が必要なので以下のようにインストールしてください。
 
-~/bin/multimonitor.rb
-~/bin/multimonitor/battery.rb
-~/bin/multimonitor/cpufreq.rb
+  gem install network_interface
+
+その後、以下のような感じで ~/bin などにコピーしてください。
+
+  ~/bin/multimonitor.rb
+  ~/bin/multimonitor/battery.rb
+  ~/bin/multimonitor/cpufreq.rb
                     :
 
 などといった感じでそのままコピーしてください。
 
 ☆使い方
 
-multimonitor.rb --battery 0
+  multimonitor.rb --battery 0
 
 と実行すれば、バッテリ0番の残量が表示されます。
 
