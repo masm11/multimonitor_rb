@@ -206,6 +206,7 @@ class Network
   
   def get_addresses
     hash = NetworkInterface::addresses(@dev)
+    return [] unless hash
     addresses = []
     for family in hash.keys.sort
       mult = hash[family]
