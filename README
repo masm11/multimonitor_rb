@@ -9,6 +9,7 @@ Xfce4 Panel Plugin ではなくなりました。
 
 gem が必要なので以下のようにインストールしてください。
 
+  gem install gtk3
   gem install network_interface
 
 その後、以下のような感じで ~/bin などにコピーしてください。
