@@ -203,6 +203,47 @@ class Network
     return sprintf('%.1fKbps', bps / 1000.0) if bps >= 1000
     return sprintf('%.1fbps', bps)
   end
+
+  def netmask_count_bits(n, max)
+    for i in 0...max
+      if n & (1 << (max - 1 - i)) == 0
+        return i
+      end
+    end
+    return max
+  end
+  
+  def netmask_to_prefixlen4(netmask)
+    a = netmask.split('.')
+    a = a[0].to_i << 24 | a[1].to_i << 16 | a[2].to_i << 8 | a[3].to_i
+    netmask_count_bits(a, 32)
+  end
+  
+  def netmask_to_prefixlen6(netmask)
+    a = netmask.split(':')
+    n = 0
+    for i in 0..7
+      if a[i] && a[i] != ''
+        n |= a[i].hex << ((7 - i) * 16)
+      end
+    end
+    netmask_count_bits(n, 128)
+  end
+  
+  def netmask_to_prefixlen(netmask)
+    @plen_cache = {} unless @plen_cache
+    if @plen_cache[netmask]
+      return @plen_cache[netmask]
+    else
+      if /:/ =~ netmask
+        plen = netmask_to_prefixlen6(netmask)
+      else
+        plen = netmask_to_prefixlen4(netmask)
+      end
+      @plen_cache[netmask] = plen
+      plen
+    end
+  end
   
   def get_addresses
     hash = NetworkInterface::addresses(@dev)
@@ -211,7 +252,15 @@ class Network
     for family in hash.keys.sort
       mult = hash[family]
       for a in mult
-        addresses << a['addr']
+        addr = a['addr']
+        addr.sub!(/%.*/, '')
+        netmask = a['netmask']
+        if netmask
+          plen = netmask_to_prefixlen(netmask)
+          addresses << addr + '/' + plen.to_s
+        else
+          addresses << addr
+        end
       end
     end
     addresses
