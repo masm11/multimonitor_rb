@@ -16,13 +16,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+require_relative 'color'
+
 def clip(val, min, max)
   val = min if val < min
   val = max if val > max
   val
 end
 
-def draw_line(pixbuf, x, y1, y2, r, g, b)
+def draw_line(pixbuf, x, y1, y2, color)
 #  p 'draw_line'
   rowstride = pixbuf.rowstride
   pixels = pixbuf.pixels;
@@ -40,7 +42,7 @@ def draw_line(pixbuf, x, y1, y2, r, g, b)
   
   for y in y1..y2
     p = y * rowstride + x * 3
-    pixels[p..p+2] = [ r, g, b ].pack('C3')
+    pixels[p..p+2] = color
   end
   
 #  pixels[0] = "\x00"
@@ -67,7 +69,7 @@ def draw_clear(pixbuf)
   for y in 0...height
     for x in 0...width
       ofs = y * rowstride + x * 3
-      pixels[ofs..ofs+2] = [0x80, 0x80, 0x80].pack('C3')
+      pixels[ofs..ofs+2] = COLOR_NODATA
     end
   end
   

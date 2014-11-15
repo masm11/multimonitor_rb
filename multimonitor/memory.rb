@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require_relative 'draw'
+require_relative 'color'
 
 class Memory
   def initialize
@@ -77,13 +78,13 @@ class Memory
       clen = height * (kernel + cached) / total
       klen = height * kernel / total
       
-      draw_line(pixbuf, x, 0, height - 1, 0, 0, 0)
-      draw_line(pixbuf, x, height - alen, height - 1, 0xff, 0x00, 0x00)
-      draw_line(pixbuf, x, height - blen, height - 1, 0x80, 0x40, 0x00)
-      draw_line(pixbuf, x, height - clen, height - 1, 0x80, 0x00, 0x00)
-      draw_line(pixbuf, x, height - klen, height - 1, 0xff, 0x80, 0x80)
+      draw_line(pixbuf, x, 0, height - 1, COLOR_BG)
+      draw_line(pixbuf, x, height - alen, height - 1, COLOR_ANON)
+      draw_line(pixbuf, x, height - blen, height - 1, COLOR_BUFF)
+      draw_line(pixbuf, x, height - clen, height - 1, COLOR_CACHE)
+      draw_line(pixbuf, x, height - klen, height - 1, COLOR_KERN)
     else
-      draw_line(pixbuf, x, 0, height - 1, 0x80, 0x80, 0x80)
+      draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
     end
   end
   

@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require_relative 'draw'
+require_relative 'color'
 
 class LoadAvg
   def initialize(dev)
@@ -79,15 +80,15 @@ class LoadAvg
       
       len = loadavg * height / max
       
-      draw_line(pixbuf, x, 0, height - 1, 0, 0, 0)
-      draw_line(pixbuf, x, height - len, height - 1, 0xff, 0x00, 0x00)
+      draw_line(pixbuf, x, 0, height - 1, COLOR_BG)
+      draw_line(pixbuf, x, height - len, height - 1, COLOR_NORMAL)
       
       for h in 1...max
         y = h * height / max
-        draw_line(pixbuf, x, y, y, 0xff, 0xff, 0xff)
+        draw_line(pixbuf, x, y, y, COLOR_LINE)
       end
     else
-      draw_line(pixbuf, x, 0, height - 1, 0x80, 0x80, 0x80)
+      draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
     end
   end
   
@@ -107,15 +108,15 @@ class LoadAvg
         
         len = loadavg * height / max
         
-        draw_line(pixbuf, x, 0, height - 1, 0, 0, 0)
-        draw_line(pixbuf, x, height - len, height - 1, 0xff, 0x00, 0x00)
+        draw_line(pixbuf, x, 0, height - 1, COLOR_BG)
+        draw_line(pixbuf, x, height - len, height - 1, COLOR_NORMAL)
 
         for h in 1...max
           y = h * height / max
-          draw_line(pixbuf, x, y, y, 0xff, 0xff, 0xff)
+          draw_line(pixbuf, x, y, y, COLOR_LINE)
         end
       else
-        draw_line(pixbuf, x, 0, height - 1, 0x80, 0x80, 0x80)
+        draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
       end
       
       x -= 1

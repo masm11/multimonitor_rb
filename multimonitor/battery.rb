@@ -17,6 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require_relative 'draw'
+require_relative 'color'
 
 class Battery
   def initialize(dev)
@@ -73,14 +74,14 @@ class Battery
       len = h['capacity'] * height / 100
       
       if h['charging']
-        draw_line(pixbuf, x, 0, height - 1, 0, 0x80, 0)
-        draw_line(pixbuf, x, height - len, height - 1, 0xff, 0x80, 0x80)
+        draw_line(pixbuf, x, 0, height - 1, COLOR_BG_CHARGE)
+        draw_line(pixbuf, x, height - len, height - 1, COLOR_CHARGE)
       else
-        draw_line(pixbuf, x, 0, height - 1, 0, 0, 0)
-        draw_line(pixbuf, x, height - len, height - 1, 0xff, 0, 0)
+        draw_line(pixbuf, x, 0, height - 1, COLOR_BG)
+        draw_line(pixbuf, x, height - len, height - 1, COLOR_NORMAL)
       end
     else
-      draw_line(pixbuf, x, 0, height - 1, 0x80, 0x80, 0x80)
+      draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
     end
   end
   

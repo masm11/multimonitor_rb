@@ -18,6 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require_relative 'draw'
+require_relative 'color'
 require 'network_interface'
 
 class Network
@@ -118,19 +119,19 @@ class Network
       len_tx = (Math.log(tx) / Math.log(1024)) * height / max / 2
       
       if h['up']
-        draw_line(pixbuf, x, 0, height - 1, 0, 0, 0)
+        draw_line(pixbuf, x, 0, height - 1, COLOR_BG)
       else
-        draw_line(pixbuf, x, 0, height - 1, 0x80, 0x80, 0x80)
+        draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
       end
-      draw_line(pixbuf, x, height / 2 - len_tx, height / 2, 0xff, 0x00, 0x00)
-      draw_line(pixbuf, x, height / 2, height / 2 + len_rx, 0x00, 0xff, 0x00)
+      draw_line(pixbuf, x, height / 2 - len_tx, height / 2, COLOR_WRITE)
+      draw_line(pixbuf, x, height / 2, height / 2 + len_rx, COLOR_READ)
       
       for yy in -max + 1 .. max - 1
         y = yy * height / max / 2 + height / 2
-        draw_line(pixbuf, x, y, y, 0x80, 0x80, 0x80)
+        draw_line(pixbuf, x, y, y, COLOR_LINE)
       end
     else
-      draw_line(pixbuf, x, 0, height - 1, 0x80, 0x80, 0x80)
+      draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
     end
   end
   
@@ -166,16 +167,16 @@ class Network
         len_rx = (Math.log(rx) / Math.log(1024)) * height / max / 2
         len_tx = (Math.log(tx) / Math.log(1024)) * height / max / 2
         
-        draw_line(pixbuf, x, 0, height - 1, 0, 0, 0)
-        draw_line(pixbuf, x, height / 2 - len_tx, height / 2, 0xff, 0x00, 0x00)
-        draw_line(pixbuf, x, height / 2, height / 2 + len_rx, 0x00, 0xff, 0x00)
+        draw_line(pixbuf, x, 0, height - 1, COLOR_BG)
+        draw_line(pixbuf, x, height / 2 - len_tx, height / 2, COLOR_WRITE)
+        draw_line(pixbuf, x, height / 2, height / 2 + len_rx, COLOR_READ)
 
         for yy in -max + 1 .. max - 1
           y = yy * height / max / 2 + height / 2
-          draw_line(pixbuf, x, y, y, 0xff, 0xff, 0xff)
+          draw_line(pixbuf, x, y, y, COLOR_LINE)
         end
       else
-        draw_line(pixbuf, x, 0, height - 1, 0x80, 0x80, 0x80)
+        draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
       end
       
       x -= 1

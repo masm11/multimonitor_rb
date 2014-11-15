@@ -18,6 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require_relative 'draw'
+require_relative 'color'
 
 class CPULoad
   NDATA = 10
@@ -82,10 +83,10 @@ class CPULoad
       
       len = load * height;
       
-      draw_line(pixbuf, x, 0, height - 1, 0, 0, 0)
-      draw_line(pixbuf, x, height - len, height - 1, 0xff, 0x00, 0x00)
+      draw_line(pixbuf, x, 0, height - 1, COLOR_BG)
+      draw_line(pixbuf, x, height - len, height - 1, COLOR_NORMAL)
     else
-      draw_line(pixbuf, x, 0, height - 1, 0x80, 0x80, 0x80)
+      draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
     end
   end
   

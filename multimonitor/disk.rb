@@ -18,6 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 require_relative 'draw'
+require_relative 'color'
 
 class Disk
   def initialize(dev)
@@ -96,16 +97,16 @@ class Disk
       len_r = (Math.log(r) / Math.log(1024)) * height / max / 2
       len_w = (Math.log(w) / Math.log(1024)) * height / max / 2
       
-      draw_line(pixbuf, x, 0, height - 1, 0, 0, 0)
-      draw_line(pixbuf, x, height / 2 - len_w, height / 2, 0xff, 0x00, 0x00)
-      draw_line(pixbuf, x, height / 2, height / 2 + len_r, 0x00, 0xff, 0x00)
+      draw_line(pixbuf, x, 0, height - 1, COLOR_BG)
+      draw_line(pixbuf, x, height / 2 - len_w, height / 2, COLOR_WRITE)
+      draw_line(pixbuf, x, height / 2, height / 2 + len_r, COLOR_READ)
       
       for yy in -max + 1 .. max - 1
         y = yy * height / max / 2 + height / 2
-        draw_line(pixbuf, x, y, y, 0x80, 0x80, 0x80)
+        draw_line(pixbuf, x, y, y, COLOR_LINE)
       end
     else
-      draw_line(pixbuf, x, 0, height - 1, 0x80, 0x80, 0x80)
+      draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
     end
   end
   
@@ -141,16 +142,16 @@ class Disk
         len_r = (Math.log(r) / Math.log(1024)) * height / max / 2
         len_w = (Math.log(w) / Math.log(1024)) * height / max / 2
         
-        draw_line(pixbuf, x, 0, height - 1, 0, 0, 0)
-        draw_line(pixbuf, x, height / 2 - len_w, height / 2, 0xff, 0x00, 0x00)
-        draw_line(pixbuf, x, height / 2, height / 2 + len_r, 0x00, 0xff, 0x00)
+        draw_line(pixbuf, x, 0, height - 1, COLOR_BG)
+        draw_line(pixbuf, x, height / 2 - len_w, height / 2, COLOR_WRITE)
+        draw_line(pixbuf, x, height / 2, height / 2 + len_r, COLOR_READ)
 
         for yy in -max + 1 .. max - 1
           y = yy * height / max / 2 + height / 2
-          draw_line(pixbuf, x, y, y, 0xff, 0xff, 0xff)
+          draw_line(pixbuf, x, y, y, COLOR_LINE)
         end
       else
-        draw_line(pixbuf, x, 0, height - 1, 0x80, 0x80, 0x80)
+        draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
       end
       
       x -= 1
