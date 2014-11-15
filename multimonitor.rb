@@ -212,6 +212,8 @@ while i < ARGV.length
   
 end
 
+Gtk::Settings.default.gtk_tooltip_timeout = 100
+
 toplevel = Gtk::Window.new("Multi Monitor")
 toplevel.set_wmclass('multimonitor', 'MultiMonitor')
 
