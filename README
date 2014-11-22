@@ -7,17 +7,7 @@ Xfce4 Panel Plugin ではなくなりました。
 
 ☆インストール
 
-gem でインストールする場合は
-
-  gem install multimonitor
-
-でできます。
-
-github から取得した場合は
-
   make install
-
-としてください。
 
 ☆使い方
 
