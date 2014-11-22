@@ -5,7 +5,8 @@ Gem::Specification.new do |s|
   s.description	= 'Status monitor of multiple devices.'
   s.authors	= ['Yuuki Harano']
   s.email	= 'masm@masm11.ddo.jp'
-  s.files	= [ 'bin/multimonitor',
+  s.files	= [ 'README', 'COPYING',
+                    'bin/multimonitor',
                     'lib/multimonitor/battery.rb',
                     'lib/multimonitor/color.rb',
                     'lib/multimonitor/cpufreq.rb',
