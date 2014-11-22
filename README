@@ -7,23 +7,21 @@ Xfce4 Panel Plugin ではなくなりました。
 
 ☆インストール
 
-gem が必要なので以下のようにインストールしてください。
+gem でインストールする場合は
 
-  gem install gtk3
-  gem install network_interface
+  gem install multimonitor
 
-その後、以下のような感じで ~/bin などにコピーしてください。
+でできます。
 
-  ~/bin/multimonitor.rb
-  ~/bin/multimonitor/battery.rb
-  ~/bin/multimonitor/cpufreq.rb
-                    :
+github から取得した場合は
 
-などといった感じでそのままコピーしてください。
+  make install
+
+としてください。
 
 ☆使い方
 
-  multimonitor.rb --battery 0
+  multimonitor --battery 0
 
 と実行すれば、バッテリ0番の残量が表示されます。
 
