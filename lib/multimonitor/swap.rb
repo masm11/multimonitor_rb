@@ -101,7 +101,7 @@ class Swap
   
   def get_tooltip_text
     used = @data[@data.length - 1]
-    return nil unless used > 0
+    return nil unless used >= 0
     size_text(used)
   end
 end
