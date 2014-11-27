@@ -215,6 +215,7 @@ end
 toplevel = Gtk::Window.new("Multi Monitor")
 toplevel.set_wmclass('multimonitor', 'MultiMonitor')
 toplevel.decorated = false
+toplevel.type_hint = :dock
 
 box = Gtk::Box.new(orientation, 1)
 toplevel.add(box)
