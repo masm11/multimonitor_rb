@@ -167,7 +167,11 @@ class Network
         len_rx = (Math.log(rx) / Math.log(1024)) * height / max / 2
         len_tx = (Math.log(tx) / Math.log(1024)) * height / max / 2
         
-        draw_line(pixbuf, x, 0, height - 1, COLOR_BG)
+        if h['up']
+          draw_line(pixbuf, x, 0, height - 1, COLOR_BG)
+        else
+          draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
+        end
         draw_line(pixbuf, x, height / 2 - len_tx, height / 2, COLOR_WRITE)
         draw_line(pixbuf, x, height / 2, height / 2 + len_rx, COLOR_READ)
 
