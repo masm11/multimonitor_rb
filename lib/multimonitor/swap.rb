@@ -73,7 +73,9 @@ class Swap
       len = height * used / @size
       
       draw_line(pixbuf, x, 0, height - 1, COLOR_BG)
-      draw_line(pixbuf, x, height - len, height - 1, COLOR_NORMAL)
+      if used > 0
+        draw_line(pixbuf, x, height - len, height - 1, COLOR_NORMAL)
+      end
     else
       draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
     end

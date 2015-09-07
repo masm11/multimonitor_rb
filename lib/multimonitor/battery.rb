@@ -75,10 +75,14 @@ class Battery
       
       if h['charging']
         draw_line(pixbuf, x, 0, height - 1, COLOR_BG_CHARGE)
-        draw_line(pixbuf, x, height - len, height - 1, COLOR_CHARGE)
+        if len > 0
+          draw_line(pixbuf, x, height - len, height - 1, COLOR_CHARGE)
+        end
       else
         draw_line(pixbuf, x, 0, height - 1, COLOR_BG)
-        draw_line(pixbuf, x, height - len, height - 1, COLOR_NORMAL)
+        if len > 0
+          draw_line(pixbuf, x, height - len, height - 1, COLOR_NORMAL)
+        end
       end
     else
       draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
