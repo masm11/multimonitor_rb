@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# coding: utf-8
 
 # Multi Monitor - shows graphs of multiple device informations
 # Copyright (C) 2014 Yuuki Harano
@@ -21,11 +22,14 @@ require 'multimonitor/color'
 
 class Temp
   def initialize(dev)
+    @dev = dev
+    @id1, @id2, @id3 = dev.split('-')
+
     @data = []
     @max = nil
     
     begin
-      File::open("/sys/devices/platform/coretemp.0/hwmon/hwmon1/temp1_max") do |f|
+      File::open("/sys/devices/platform/coretemp.#{@id1}/hwmon/hwmon#{@id2}/temp#{@id3}_max") do |f|
         f.each_line do |line|
           @max = line.to_i / 1000.0
         end
@@ -39,7 +43,7 @@ class Temp
     temp = nil
     
     begin
-      File::open("/sys/devices/platform/coretemp.0/hwmon/hwmon1/temp1_input") do |f|
+      File::open("/sys/devices/platform/coretemp.#{@id1}/hwmon/hwmon#{@id2}/temp#{@id3}_input") do |f|
         f.each_line do |line|
           temp = line.to_i / 1000.0
         end
@@ -73,7 +77,7 @@ class Temp
   end
 
   def get_label
-    "Temperature\nCPU"
+    "Temperature\n#{@dev}"
   end
   
   def get_tick_per_draw
@@ -89,7 +93,7 @@ class Temp
   def get_tooltip_text
     temp = @data[@data.length - 1]
     return nil unless temp
-    sprintf('%.1fC', temp)
+    sprintf('%.1f℃', temp)  # ℃ is U+2103
   end
 end
 
