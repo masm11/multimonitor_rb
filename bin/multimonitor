@@ -29,6 +29,7 @@ require 'multimonitor/memory'
 require 'multimonitor/swap'
 require 'multimonitor/disk'
 require 'multimonitor/temp'
+require 'multimonitor/rfkill'
 
 # --vertical
 # --horizontal
@@ -205,6 +206,13 @@ while i < ARGV.length
     devices << dev
     i += 1
     
+  when '--rfkill'
+    i += 1
+    dev = Device.new
+    dev.dev = RfKill.new(ARGV[i])
+    devices << dev
+    i += 1
+
   else
     $stderr.puts('unknown args.')
     exit(1)
@@ -246,6 +254,9 @@ if geometry
 end
 
 toplevel.show
+
+#tooltip = Gtk::Tooltip.new
+#tooltip.set_text('foo')
 
 tick_count = 0
 

@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name	= 'multimonitor'
-  s.version	= '1.1.0'
+  s.version	= '1.2.0'
   s.summary	= "Multi Monitor"
   s.description	= 'Status monitor of multiple devices.'
   s.authors	= ['Yuuki Harano']
@@ -17,7 +17,8 @@ Gem::Specification.new do |s|
                     'lib/multimonitor/memory.rb',
                     'lib/multimonitor/network.rb',
                     'lib/multimonitor/swap.rb',
-                    'lib/multimonitor/temp.rb' ]
+                    'lib/multimonitor/temp.rb',
+                    'lib/multimonitor/rfkill.rb' ]
   s.executables	<< 'multimonitor'
   s.homepage	= 'https://github.com/masm11/multimonitor'
   s.license	= 'GPL'
