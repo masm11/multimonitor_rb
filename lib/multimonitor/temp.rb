@@ -49,7 +49,7 @@ class Temp
         end
       end
     rescue => e
-      p e
+      # p e
     end
     
     @data << temp
