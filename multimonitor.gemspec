@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name	= 'multimonitor'
-  s.version	= '1.2.0'
+  s.version	= '1.2.1'
   s.summary	= "Multi Monitor"
   s.description	= 'Status monitor of multiple devices.'
   s.authors	= ['Yuuki Harano']
