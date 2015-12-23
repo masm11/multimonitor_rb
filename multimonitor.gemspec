@@ -22,6 +22,6 @@ Gem::Specification.new do |s|
   s.executables	<< 'multimonitor'
   s.homepage	= 'https://github.com/masm11/multimonitor'
   s.license	= 'GPL'
-  s.add_runtime_dependency 'gtk3', '~> 2.2', '>= 2.2.3'
+  s.add_runtime_dependency 'gtk3', '~> 3.0', '>= 3.0.7'
   s.add_runtime_dependency 'network_interface', '~> 0.0', '>= 0.0.1'
 end
