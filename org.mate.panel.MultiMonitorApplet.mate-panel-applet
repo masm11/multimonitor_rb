@@ -1,0 +1,10 @@
+[Applet Factory]
+Id=MultiMonitorAppletFactory
+InProcess=false
+Name=MultiMonitor Applet Factory
+Description=MultiMonitor Applet Factory
+
+[MultiMonitorApplet]
+Name=Multi Monitor
+Description=Multiple Device Monitor
+Icon=mate
