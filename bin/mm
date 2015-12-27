@@ -210,9 +210,7 @@ class MultiMonitor
     @devices = []
     @d2d = {}	# drawable to device
     
-    dev = Device.new
-    dev.dev = CPUFreq.new('0')
-    @devices << dev
+    @devices = device_list
     
     box = Gtk::Box.new(orientation, 1)
     box.show
@@ -259,6 +257,30 @@ class MultiMonitor
       tick_count += 1
       true
     end
+  end
+  
+  private
+  def device_list
+    list = []
+    
+    dev = Device.new; dev.dev = Battery.new('0');      list << dev
+    dev = Device.new; dev.dev = CPUFreq.new('0');      list << dev
+    dev = Device.new; dev.dev = CPUFreq.new('1');      list << dev
+    dev = Device.new; dev.dev = CPUFreq.new('2');      list << dev
+    dev = Device.new; dev.dev = CPUFreq.new('3');      list << dev
+    dev = Device.new; dev.dev = LoadAvg.new('1');      list << dev
+    dev = Device.new; dev.dev = CPULoad.new('0');      list << dev
+    dev = Device.new; dev.dev = CPULoad.new('1');      list << dev
+    dev = Device.new; dev.dev = CPULoad.new('2');      list << dev
+    dev = Device.new; dev.dev = CPULoad.new('3');      list << dev
+    dev = Device.new; dev.dev = Network.new('wlp1s0'); list << dev
+    dev = Device.new; dev.dev = Network.new('lo');     list << dev
+    dev = Device.new; dev.dev = Memory.new;            list << dev
+    dev = Device.new; dev.dev = Swap.new('/dev/sda8'); list << dev
+    dev = Device.new; dev.dev = Disk.new('sda');       list << dev
+    dev = Device.new; dev.dev = Temp.new('0-2-1');     list << dev
+    
+    list
   end
 end
 
