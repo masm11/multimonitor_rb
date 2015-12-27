@@ -2,4 +2,4 @@ all:
 	gem build multimonitor.gemspec
 
 install: all
-	gem install ./multimonitor-1.2.1.gem
+	gem install ./multimonitor-`ruby -e 'require "./lib/multimonitor/version"; print VERSION'`.gem

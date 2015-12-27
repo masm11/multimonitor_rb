@@ -7,4 +7,3 @@ Description=MultiMonitor Applet Factory
 [MultiMonitorApplet]
 Name=Multi Monitor
 Description=Multiple Device Monitor
-Icon=mate

@@ -2,71 +2,25 @@ Multi Monitor in Ruby
 
 ☆はじめに
 
-ruby で書いた Multi Monitor です。
-Xfce4 Panel Plugin ではなくなりました。
+MATE Panel Applet 版 Multi Monitor です。
 
 ☆インストール
 
   make install
+  sudo ln -s ~/.gem/ruby/2.2.0/gems/multimonitor-2.0.0/org.mate.panel.applet.MultiMonitorAppletFactory.service /usr/share/dbus-1/services/
+  sudo ln -s ~/.gem/ruby/2.2.0/gems/multimonitor-2.0.0/org.mate.panel.MultiMonitorApplet.mate-panel-applet /usr/share/mate-panel/applets/
+
+  MultiMonitorAppletFactory.service や MultiMonitorApplet.mate-panel-applet
+  は、インストールされた場所を指定してください。
+  MultiMonitorAppletFactory.service は、中に multimonitor の
+  script の場所を書くようになっているので、修正してください。
 
 ☆使い方
 
-  multimonitor --battery 0
+  パネルを右クリックして「パネルへ追加」から Multi Monitor を
+  選択してください。
 
-と実行すれば、バッテリ0番の残量が表示されます。
-
-オプションは以下の通りです。
-
-  --battery <battery-id>
-    バッテリ残量を表示します。
-
-  --cpufreq <cpu-id>
-    CPU の周波数を表示します。
-
-  --loadavg <min>
-    load average を表示します。
-    <min> は 1, 5, 15 のいずれかです。
-
-  --cpuload <cpu-id>
-    CPU の負荷を表示します。
-
-  --network <interface>
-    ネットワークトラフィックを表示します。
-    赤が送信、緑が受信です。
-
-  --memory
-    メモリ使用量を表示します。
-
-  --swap <device>
-    swap の使用量を表示します。
-    <device> には /dev/sda8 などを指定します。
-
-  --disk <device>
-    disk アクセス量を表示します。
-    赤が書き込み、緑が読み込みです。
-    <device> には sda などを指定します。
-
-  --temp cpu
-    CPU 温度を表示します。
-
-  --width <pixel>
-    各グラフの幅を指定します。
-
-  --height <pixel>
-    各グラフの高さを指定します。
-
-  --font <fontname>
-    font を指定します。
-    <fontname> は sans 8 などと指定します。
-
-  --vertical
-    グラフを指定した順に縦に並べます。
-
-  --horizontal
-    グラフを指定した順に横に並べます。
-
-  --geometry <position>
-    表示位置を指定します。
+  設定機能はありませんので、ソースをいじってください。
 
 ☆使用条件・著作権
 
