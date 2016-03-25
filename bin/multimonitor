@@ -19,7 +19,7 @@
 
 require 'gobject-introspection'
 require 'gtk3'
-require '/home/masm/src/multimonitor/rb/ext/mpa'
+# require 'mpa'
 
 require 'multimonitor/draw'
 require 'multimonitor/battery'
@@ -204,7 +204,7 @@ class MultiMonitor
     width = 48
     height = 48
     orientation = :horizontal
-    @font = 'sans 8'
+    @font = 'sans 5'
     
     @applet = applet
     @devices = []
@@ -278,7 +278,7 @@ class MultiMonitor
     dev = Device.new; dev.dev = Memory.new;            list << dev
     dev = Device.new; dev.dev = Swap.new('/dev/sda8'); list << dev
     dev = Device.new; dev.dev = Disk.new('sda');       list << dev
-    dev = Device.new; dev.dev = Temp.new('0-2-1');     list << dev
+    dev = Device.new; dev.dev = Temp.new('0-coretemp-1');     list << dev
     
     list
   end
@@ -289,3 +289,4 @@ ret = MatePanelApplet::Applet.factory_main('MultiMonitorAppletFactory', true, Ma
   applet.show
   true
 end
+p ret
