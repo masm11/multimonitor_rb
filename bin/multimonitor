@@ -19,7 +19,7 @@
 
 require 'gobject-introspection'
 require 'gtk3'
-# require 'mpa'
+require 'mpa'
 
 require 'multimonitor/draw'
 require 'multimonitor/battery'
