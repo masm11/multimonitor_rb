@@ -69,11 +69,11 @@ class Temp
     @data << temp
   end
   
-  def draw_1(pixbuf)
-    width = pixbuf.width
-    height = pixbuf.height
+  def draw_1(draw)
+    width = draw.width
+    height = draw.height
     
-    draw_shift(pixbuf)
+    draw.shift
     
     i = @data.length - 1
     x = width - 1
@@ -83,10 +83,10 @@ class Temp
       
       len = height * temp / @max
       
-      draw_line(pixbuf, x, 0, height - 1, COLOR_BG)
-      draw_line(pixbuf, x, height - len, height - 1, COLOR_NORMAL)
+      draw.line(x, 0, height - 1, COLOR_BG)
+      draw.line(x, height - len, height - 1, COLOR_NORMAL)
     else
-      draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
+      draw.line(x, 0, height - 1, COLOR_NODATA)
     end
   end
 

@@ -59,11 +59,11 @@ class Battery
     @data << h
   end
   
-  def draw_1(pixbuf)
-    width = pixbuf.width
-    height = pixbuf.height
+  def draw_1(draw)
+    width = draw.width
+    height = draw.height
     
-    draw_shift(pixbuf)
+    draw.shift
     
     i = @data.length - 1
     x = width - 1
@@ -74,18 +74,18 @@ class Battery
       len = h['capacity'] * height / 100
       
       if h['charging']
-        draw_line(pixbuf, x, 0, height - 1, COLOR_BG_CHARGE)
+        draw.line(x, 0, height - 1, COLOR_BG_CHARGE)
         if len > 0
-          draw_line(pixbuf, x, height - len, height - 1, COLOR_CHARGE)
+          draw.line(x, height - len, height - 1, COLOR_CHARGE)
         end
       else
-        draw_line(pixbuf, x, 0, height - 1, COLOR_BG)
+        draw.line(x, 0, height - 1, COLOR_BG)
         if len > 0
-          draw_line(pixbuf, x, height - len, height - 1, COLOR_NORMAL)
+          draw.line(x, height - len, height - 1, COLOR_NORMAL)
         end
       end
     else
-      draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
+      draw.line(x, 0, height - 1, COLOR_NODATA)
     end
   end
   

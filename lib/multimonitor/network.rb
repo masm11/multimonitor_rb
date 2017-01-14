@@ -80,9 +80,9 @@ class Network
     @data << h
   end
   
-  def draw_1(pixbuf)
-    width = pixbuf.width
-    height = pixbuf.height
+  def draw_1(draw)
+    width = draw.width
+    height = draw.height
     
     max = 1024
     for h in @data
@@ -98,11 +98,11 @@ class Network
     max = (Math.log(max) / Math.log(1024)).ceil
     
     if @max != max
-      draw_all(pixbuf)
+      draw_all(draw)
       return
     end
     
-    draw_shift(pixbuf)
+    draw.shift
     
     i = @data.length - 1
     x = width - 1
@@ -119,25 +119,25 @@ class Network
       len_tx = (Math.log(tx) / Math.log(1024)) * height / max / 2
       
       if h['up']
-        draw_line(pixbuf, x, 0, height - 1, COLOR_BG)
+        draw.line(x, 0, height - 1, COLOR_BG)
       else
-        draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
+        draw.line(x, 0, height - 1, COLOR_NODATA)
       end
-      draw_line(pixbuf, x, height / 2 - len_tx, height / 2, COLOR_WRITE)
-      draw_line(pixbuf, x, height / 2, height / 2 + len_rx, COLOR_READ)
+      draw.line(x, height / 2 - len_tx, height / 2, COLOR_WRITE)
+      draw.line(x, height / 2, height / 2 + len_rx, COLOR_READ)
       
       for yy in -max + 1 .. max - 1
         y = yy * height / max / 2 + height / 2
-        draw_line(pixbuf, x, y, y, COLOR_LINE)
+        draw.line(x, y, y, COLOR_LINE)
       end
     else
-      draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
+      draw.line(x, 0, height - 1, COLOR_NODATA)
     end
   end
   
-  def draw_all(pixbuf)
-    width = pixbuf.width
-    height = pixbuf.height
+  def draw_all(draw)
+    width = draw.width
+    height = draw.height
     
     max = 1024
     for h in @data
@@ -168,19 +168,19 @@ class Network
         len_tx = (Math.log(tx) / Math.log(1024)) * height / max / 2
         
         if h['up']
-          draw_line(pixbuf, x, 0, height - 1, COLOR_BG)
+          draw.line(x, 0, height - 1, COLOR_BG)
         else
-          draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
+          draw.line(x, 0, height - 1, COLOR_NODATA)
         end
-        draw_line(pixbuf, x, height / 2 - len_tx, height / 2, COLOR_WRITE)
-        draw_line(pixbuf, x, height / 2, height / 2 + len_rx, COLOR_READ)
+        draw.line(x, height / 2 - len_tx, height / 2, COLOR_WRITE)
+        draw.line(x, height / 2, height / 2 + len_rx, COLOR_READ)
 
         for yy in -max + 1 .. max - 1
           y = yy * height / max / 2 + height / 2
-          draw_line(pixbuf, x, y, y, COLOR_LINE)
+          draw.line(x, y, y, COLOR_LINE)
         end
       else
-        draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
+        draw.line(x, 0, height - 1, COLOR_NODATA)
       end
       
       x -= 1

@@ -65,19 +65,19 @@ class Device
     @layout
   end
   
-  @pixbuf = nil
-  def pixbuf=(pixbuf)
-    @pixbuf = pixbuf
+  @draw = nil
+  def draw=(draw)
+    @draw = draw
   end
-  def pixbuf
-    @pixbuf
+  def draw
+    @draw
   end
 end
 
 def draw_dev (dev)
   ctxt = dev.drawable.window.create_cairo_context
   ctxt.save do
-    ctxt.set_source_pixbuf(dev.pixbuf)
+    ctxt.set_source_pixbuf(dev.draw.create_pixbuf)
     ctxt.paint
   end
   ctxt.show_pango_layout(dev.layout)
@@ -232,8 +232,8 @@ class MultiMonitor
       dev.layout.markup = "<span foreground='white'>" + dev.dev.get_label + "</span>"
       dev.layout.font_description = fontdesc
       
-      dev.pixbuf = Gdk::Pixbuf.new(Gdk::Pixbuf::COLORSPACE_RGB, false, 8, width, height)
-      draw_clear(dev.pixbuf)
+      dev.draw = Draw.new(width, height)
+      dev.draw.clear
     end
     
     tick_count = 0
@@ -246,7 +246,7 @@ class MultiMonitor
           dev.dev.read_data
           dev.dev.discard_data(width)
           
-          dev.dev.draw_1(dev.pixbuf)
+          dev.dev.draw_1(dev.draw)
           draw_dev(dev)
           
           tooltip = dev.dev.get_tooltip_text

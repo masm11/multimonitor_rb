@@ -69,11 +69,11 @@ class CPULoad
     @data << load
   end
   
-  def draw_1(pixbuf)
-    width = pixbuf.width
-    height = pixbuf.height
+  def draw_1(draw)
+    width = draw.width
+    height = draw.height
     
-    draw_shift(pixbuf)
+    draw.shift
     
     i = @data.length - 1
     x = width - 1
@@ -83,12 +83,12 @@ class CPULoad
       
       len = load * height;
       
-      draw_line(pixbuf, x, 0, height - 1, COLOR_BG)
+      draw.line(x, 0, height - 1, COLOR_BG)
       if load > 0
-        draw_line(pixbuf, x, height - len, height - 1, COLOR_NORMAL)
+        draw.line(x, height - len, height - 1, COLOR_NORMAL)
       end
     else
-      draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
+      draw.line(x, 0, height - 1, COLOR_NODATA)
     end
   end
 

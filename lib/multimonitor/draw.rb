@@ -16,62 +16,80 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+require 'gtk3'
 require 'multimonitor/color'
 
-def clip(val, min, max)
-  val = min if val < min
-  val = max if val > max
-  val
-end
-
-def draw_line(pixbuf, x, y1, y2, color)
-#  p 'draw_line'
-  rowstride = pixbuf.rowstride
-  pixels = pixbuf.pixels;
+class Draw
   
-  y1 = y1.to_i
-  y2 = y2.to_i
-  if y1 > y2
-    t = y1
-    y1 = y2
-    y2 = t
-  end
-  x = clip(x, 0, pixbuf.width - 1)
-  y1 = clip(y1, 0, pixbuf.height - 1)
-  y2 = clip(y2, 0, pixbuf.height - 1)
-  
-  for y in y1..y2
-    p = y * rowstride + x * 3
-    pixels[p..p+2] = color
+  def initialize(width, height)
+    @width = width
+    @height = height
+    @data = [ 0, 0, 0 ] * (@width * @height)
   end
   
-#  pixels[0] = "\x00"
-#  pixels[1] = "\x00"
-#  pixels[2] = "\x00"
-  pixbuf.pixels = pixels
-#  p pixbuf.pixels
-end
-
-def draw_shift(pixbuf)
-  pixels = pixbuf.pixels
-  overflow = pixels[0..2]
-  pixels[0..2] = ''
-  pixels[pixels.length..pixels.length + 2] = overflow
-  pixbuf.pixels = pixels
-end
-
-def draw_clear(pixbuf)
-  width = pixbuf.width
-  height = pixbuf.height
-  rowstride = pixbuf.rowstride
-  pixels = pixbuf.pixels;
-  
-  for y in 0...height
-    for x in 0...width
-      ofs = y * rowstride + x * 3
-      pixels[ofs..ofs+2] = COLOR_NODATA
+  def line(x, y1, y2, color)
+    rowstride = @width * 3
+    
+    y1 = y1.to_i
+    y2 = y2.to_i
+    if y1 > y2
+      t = y1
+      y1 = y2
+      y2 = t
+    end
+    x = clip(x, 0, @width - 1)
+    y1 = clip(y1, 0, @height - 1)
+    y2 = clip(y2, 0, @height - 1)
+    
+    for y in y1..y2
+      p = y * rowstride + x * 3
+      @data[p..p+2] = color
     end
   end
   
-  pixbuf.pixels = pixels
+  def shift
+    overflow = @data[0..2]
+    @data[0..2] = []
+    @data[@data.length..@data.length + 2] = overflow
+  end
+  
+  def clear
+    rowstride = @width * 3
+    
+    for y in 0...height
+      for x in 0...width
+        ofs = y * rowstride + x * 3
+        @data[ofs..ofs+2] = COLOR_NODATA
+      end
+    end
+  end
+  
+  def create_pixbuf
+    
+    @data.pack('C*')
+    
+    GdkPixbuf::Pixbuf.new(data: @data.pack('C*'),
+                          colorspace: :rgb,
+                          has_alpha: false,
+                          bits_per_sample: 8,
+                          width: @width,
+                          height: @height,
+                          row_stride: @width * 3)
+  end
+  
+  def width
+    @width
+  end
+  
+  def height
+    @height
+  end
+  
+  private
+  def clip(val, min, max)
+    val = min if val < min
+    val = max if val > max
+    val
+  end
+
 end

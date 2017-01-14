@@ -55,11 +55,11 @@ class RfKill
     @data << h
   end
   
-  def draw_1(pixbuf)
-    width = pixbuf.width
-    height = pixbuf.height
+  def draw_1(draw)
+    width = draw.width
+    height = draw.height
     
-    draw_shift(pixbuf)
+    draw.shift
     
     i = @data.length - 1
     x = width - 1
@@ -77,9 +77,9 @@ class RfKill
         color = COLOR_BG
       end
       
-      draw_line(pixbuf, x, 0, height - 1, color)
+      draw.line(x, 0, height - 1, color)
     else
-      draw_line(pixbuf, x, 0, height - 1, COLOR_NODATA)
+      draw.line(x, 0, height - 1, COLOR_NODATA)
     end
   end
 
