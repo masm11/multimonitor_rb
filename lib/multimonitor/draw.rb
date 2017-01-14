@@ -24,7 +24,7 @@ class Draw
   def initialize(width, height)
     @width = width
     @height = height
-    @data = [ 0 ] * (row_stride * @height)
+    @data = Array.new(row_stride * @height, 0)
   end
   
   def line(x, y1, y2, color)
@@ -32,18 +32,16 @@ class Draw
     
     y1 = y1.to_i
     y2 = y2.to_i
-    if y1 > y2
-      t = y1
-      y1 = y2
-      y2 = t
-    end
+    y1, y2 = y2, y1 if y1 > y2
+    
     x = clip(x, 0, @width - 1)
     y1 = clip(y1, 0, @height - 1)
     y2 = clip(y2, 0, @height - 1)
     
+    i = y1 * rowstride + x * 3
     for y in y1..y2
-      p = y * rowstride + x * 3
-      @data[p..p+2] = color
+      @data[i..i+2] = color
+      i += rowstride
     end
   end
   
@@ -55,9 +53,10 @@ class Draw
     rowstride = row_stride
     
     for y in 0...height
+      i = y * rowstride
       for x in 0...width
-        ofs = y * rowstride + x * 3
-        @data[ofs..ofs+2] = COLOR_NODATA
+        @data[i..i+2] = COLOR_NODATA
+        i += 3
       end
     end
   end
