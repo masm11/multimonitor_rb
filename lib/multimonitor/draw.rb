@@ -24,11 +24,11 @@ class Draw
   def initialize(width, height)
     @width = width
     @height = height
-    @data = [ 0, 0, 0 ] * (@width * @height)
+    @data = [ 0 ] * (row_stride * @height)
   end
   
   def line(x, y1, y2, color)
-    rowstride = @width * 3
+    rowstride = row_stride
     
     y1 = y1.to_i
     y2 = y2.to_i
@@ -48,13 +48,11 @@ class Draw
   end
   
   def shift
-    overflow = @data[0..2]
-    @data[0..2] = []
-    @data[@data.length..@data.length + 2] = overflow
+    @data.rotate!(3)
   end
   
   def clear
-    rowstride = @width * 3
+    rowstride = row_stride
     
     for y in 0...height
       for x in 0...width
@@ -65,16 +63,13 @@ class Draw
   end
   
   def create_pixbuf
-    
-    @data.pack('C*')
-    
     GdkPixbuf::Pixbuf.new(data: @data.pack('C*'),
                           colorspace: :rgb,
                           has_alpha: false,
                           bits_per_sample: 8,
                           width: @width,
                           height: @height,
-                          row_stride: @width * 3)
+                          row_stride: row_stride)
   end
   
   def width
@@ -90,6 +85,10 @@ class Draw
     val = min if val < min
     val = max if val > max
     val
+  end
+  
+  def row_stride
+    @width * 3
   end
 
 end
