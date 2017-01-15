@@ -77,8 +77,10 @@ end
 def draw_dev (dev)
   ctxt = dev.drawable.window.create_cairo_context
   ctxt.save do
-    ctxt.set_source_pixbuf(dev.draw.create_pixbuf)
+    pixbuf = dev.draw.create_pixbuf
+    ctxt.set_source_pixbuf(pixbuf)
     ctxt.paint
+    pixbuf.unref
   end
   ctxt.show_pango_layout(dev.layout)
 end
