@@ -238,9 +238,7 @@ class MultiMonitor
     tick_count = 0
     
     GLib::Timeout.add(250) do
-      for i in 0...@devices.length
-        dev = @devices[i]
-        
+      @devices.each do |dev|
         if tick_count % dev.dev.get_tick_per_draw == 0
           dev.dev.read_data
           
