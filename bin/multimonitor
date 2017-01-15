@@ -74,15 +74,15 @@ class Device
   end
 end
 
-def draw_dev (dev)
-  ctxt = dev.drawable.window.create_cairo_context
-  ctxt.save do
+def draw_dev (dev, cr)
+  cr.save do
     pixbuf = dev.draw.create_pixbuf
-    ctxt.set_source_pixbuf(pixbuf)
-    ctxt.paint
+    cr.set_source_pixbuf(pixbuf)
+    cr.paint
     pixbuf.unref
   end
-  ctxt.show_pango_layout(dev.layout)
+  
+  cr.show_pango_layout(dev.layout)
 end
 
 geometry = nil
@@ -92,7 +92,6 @@ font = 'sans 8'
 orientation = :horizontal
 
 devices = []
-d2d = {}	# drawable to device
 
 #i = 0
 #while i < ARGV.length
@@ -210,7 +209,6 @@ class MultiMonitor
     
     @applet = applet
     @devices = []
-    @d2d = {}	# drawable to device
     
     @devices = device_list(width)
     
@@ -224,10 +222,9 @@ class MultiMonitor
       dev.drawable = Gtk::DrawingArea.new
       dev.drawable.show
       dev.drawable.set_size_request(width, height)
-      dev.drawable.signal_connect('draw') do |w|
-        draw_dev(@d2d[w])
+      dev.drawable.signal_connect('draw', dev) do |w, cr, dev|
+        draw_dev(dev, cr)
       end
-      @d2d[dev.drawable] = dev
       box.add(dev.drawable)
       
       dev.layout = dev.drawable.create_pango_layout
@@ -248,7 +245,7 @@ class MultiMonitor
           dev.dev.read_data
           
           dev.dev.draw_1(dev.draw)
-          draw_dev(dev)
+          dev.drawable.queue_draw_area(0, 0, width, height)
           
           tooltip = dev.dev.get_tooltip_text
           dev.drawable.set_tooltip_text(tooltip)
@@ -258,30 +255,33 @@ class MultiMonitor
       tick_count += 1
       true
     end
+
   end
   
   private
   def device_list(width)
-    list = []
-    
-    dev = Device.new; dev.dev = Battery.new('0', width);      list << dev
-    dev = Device.new; dev.dev = CPUFreq.new('0', width);      list << dev
-    dev = Device.new; dev.dev = CPUFreq.new('1', width);      list << dev
-    dev = Device.new; dev.dev = CPUFreq.new('2', width);      list << dev
-    dev = Device.new; dev.dev = CPUFreq.new('3', width);      list << dev
-    dev = Device.new; dev.dev = LoadAvg.new('1', width);      list << dev
-    dev = Device.new; dev.dev = CPULoad.new('0', width);      list << dev
-    dev = Device.new; dev.dev = CPULoad.new('1', width);      list << dev
-    dev = Device.new; dev.dev = CPULoad.new('2', width);      list << dev
-    dev = Device.new; dev.dev = CPULoad.new('3', width);      list << dev
-    dev = Device.new; dev.dev = Network.new('wlp1s0', width); list << dev
-    dev = Device.new; dev.dev = Network.new('lo', width);     list << dev
-    dev = Device.new; dev.dev = Memory.new(width);            list << dev
-    dev = Device.new; dev.dev = Swap.new('/dev/sda8', width); list << dev
-    dev = Device.new; dev.dev = Disk.new('sda', width);       list << dev
-    dev = Device.new; dev.dev = Temp.new('0-coretemp-1', width);     list << dev
-    
-    list
+    [
+      Battery.new('0', width),
+      CPUFreq.new('0', width),
+      CPUFreq.new('1', width),
+      CPUFreq.new('2', width),
+      CPUFreq.new('3', width),
+      LoadAvg.new('1', width),
+      CPULoad.new('0', width),
+      CPULoad.new('1', width),
+      CPULoad.new('2', width),
+      CPULoad.new('3', width),
+      Network.new('wlp1s0', width),
+      Network.new('lo', width),
+      Memory.new(width),
+      Swap.new('/dev/sda8', width),
+      Disk.new('sda', width),
+      Temp.new('0-coretemp-1', width),
+    ].map do |d|
+      dev = Device.new
+      dev.dev = d
+      dev
+    end
   end
 end
 
