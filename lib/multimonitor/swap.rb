@@ -18,10 +18,11 @@
 
 require 'multimonitor/draw'
 require 'multimonitor/color'
+require 'multimonitor/device_base'
 
-class Swap
-  def initialize(dev)
-    @data = []
+class Swap < DeviceBase
+  def initialize(dev, width)
+    super(width, -1)
     @dev = dev
     @size = -1
     
@@ -55,7 +56,7 @@ class Swap
       p e
     end
     
-    @data << used
+    push_data(used)
   end
   
   def draw_1(draw)
@@ -64,12 +65,10 @@ class Swap
     
     draw.shift
     
-    i = @data.length - 1
     x = width - 1
     
-    if @size > 0 && i >= 0 && @data[i] >= 0
-      used = @data[i]
-      
+    used = get_last_data
+    if @size > 0 && used >= 0
       len = height * used / @size
       
       draw.line(x, 0, height - 1, COLOR_BG)
@@ -88,12 +87,6 @@ class Swap
   def get_tick_per_draw
     4
   end
-  
-  def discard_data(maxlen)
-    if @data.length > maxlen
-      @data.slice!(0, @data.length - maxlen)
-    end
-  end
 
   def size_text(size)
     return sprintf('%.1fGB', size / 1024.0 / 1024) if size >= 1024 * 1024
@@ -102,7 +95,7 @@ class Swap
   end
   
   def get_tooltip_text
-    used = @data[@data.length - 1]
+    used = get_last_data
     return nil unless used >= 0
     size_text(used)
   end

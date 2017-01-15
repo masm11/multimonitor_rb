@@ -18,10 +18,11 @@
 
 require 'multimonitor/draw'
 require 'multimonitor/color'
+require 'multimonitor/device_base'
 
-class CPUFreq
-  def initialize(dev)
-    @data = []
+class CPUFreq < DeviceBase
+  def initialize(dev, width)
+    super(width, 0)
     @dev = dev
 
     @max_freq = -1
@@ -50,7 +51,7 @@ class CPUFreq
       #    p e
     end
     
-    @data << freq
+    push_data(freq)
   end
   
   def draw_1(draw)
@@ -59,12 +60,10 @@ class CPUFreq
     
     draw.shift
     
-    i = @data.length - 1
     x = width - 1
     
-    if @max_freq > 0 && i >= 0 && @data[i] > 0
-      freq = @data[i]
-      
+    freq = get_last_data
+    if @max_freq > 0 && freq > 0
       len = freq * height / @max_freq
       
       draw.line(x, 0, height - 1, COLOR_BG)
@@ -82,14 +81,8 @@ class CPUFreq
     1
   end
   
-  def discard_data(maxlen)
-    if @data.length > maxlen
-      @data.slice!(0, @data.length - maxlen)
-    end
-  end
-  
   def get_tooltip_text
-    freq = @data[@data.length - 1]
+    freq = get_last_data
     return nil unless freq > 0
     if freq >= 1000000
       sprintf('%.1fGHz', freq / 1000000.0)

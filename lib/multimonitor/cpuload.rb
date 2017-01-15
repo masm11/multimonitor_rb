@@ -19,12 +19,13 @@
 
 require 'multimonitor/draw'
 require 'multimonitor/color'
+require 'multimonitor/device_base'
 
-class CPULoad
+class CPULoad < DeviceBase
   NDATA = 10
   
-  def initialize(dev)
-    @data = []
+  def initialize(dev, width)
+    super(width, -1)
     @dev = dev
     @olddata = []
     for i in 0...NDATA
@@ -66,7 +67,7 @@ class CPULoad
       load = -1
     end
     
-    @data << load
+    push_data(load)
   end
   
   def draw_1(draw)
@@ -75,12 +76,10 @@ class CPULoad
     
     draw.shift
     
-    i = @data.length - 1
     x = width - 1
     
-    if i >= 0 && @data[i] >= 0
-      load = @data[i]
-      
+    load = get_last_data
+    if load >= 0
       len = load * height;
       
       draw.line(x, 0, height - 1, COLOR_BG)
@@ -100,14 +99,8 @@ class CPULoad
     1
   end
   
-  def discard_data(maxlen)
-    if @data.length > maxlen
-      @data.slice!(0, @data.length - maxlen)
-    end
-  end
-  
   def get_tooltip_text
-    load = @data[@data.length - 1]
+    load = get_last_data
     return nil unless load >= 0
     sprintf('%.1f%%', load * 100)
   end

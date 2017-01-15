@@ -19,11 +19,12 @@
 
 require 'multimonitor/draw'
 require 'multimonitor/color'
+require 'multimonitor/device_base'
 require 'network_interface'
 
-class Network
-  def initialize(dev)
-    @data = []
+class Network < DeviceBase
+  def initialize(dev, width)
+    super(width, nil)
     @dev = dev
     @oldrx = 0
     @oldtx = 0
@@ -77,7 +78,7 @@ class Network
       h = nil
     end
     
-    @data << h
+    push_data(h)
   end
   
   def draw_1(draw)
@@ -85,7 +86,7 @@ class Network
     height = draw.height
     
     max = 1024
-    for h in @data
+    @data.each do |h|
       if h
         if max < h['rx']
           max = h['rx']
@@ -104,12 +105,10 @@ class Network
     
     draw.shift
     
-    i = @data.length - 1
     x = width - 1
     
-    if i >= 0 && @data[i]
-      h = @data[i]
-      
+    h = get_last_data
+    if h
       rx = h['rx']
       tx = h['tx']
       rx = 1 if rx < 1
@@ -140,7 +139,7 @@ class Network
     height = draw.height
     
     max = 1024
-    for h in @data
+    @data.each do |h|
       if h
         if max < h['rx']
           max = h['rx']
@@ -156,9 +155,8 @@ class Network
     i = @data.length - 1
     x = width - 1
     while x >= 0
-      if i >= 0 && @data[i]
-        h = @data[i]
-        
+      h = @data[i]
+      if h
         rx = h['rx']
         tx = h['tx']
         rx = 1 if rx < 1
@@ -194,12 +192,6 @@ class Network
   
   def get_tick_per_draw
     4
-  end
-  
-  def discard_data(maxlen)
-    if @data.length > maxlen
-      @data.slice!(0, @data.length - maxlen)
-    end
   end
   
   def bps_text(bps)
@@ -278,7 +270,7 @@ class Network
       text += delim + addr
       delim = "\n"
     end
-    h = @data[@data.length - 1]
+    h = get_last_data
     if h
       text += sprintf("\nTx:%s\nRx:%s", bps_text(h['tx']), bps_text(h['rx']))
     end

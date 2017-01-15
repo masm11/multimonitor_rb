@@ -19,13 +19,14 @@
 
 require 'multimonitor/draw'
 require 'multimonitor/color'
+require 'multimonitor/device_base'
 
-class Temp
-  def initialize(dev)
+class Temp < DeviceBase
+  def initialize(dev, width)
+    super(width, nil)
     @dev = dev
     @id1, @id2n, @id3 = dev.split('-')
-
-    @data = []
+    
     @max = nil
     @id2 = -1
     
@@ -66,7 +67,7 @@ class Temp
       # p e
     end
     
-    @data << temp
+    push_data(temp)
   end
   
   def draw_1(draw)
@@ -75,11 +76,10 @@ class Temp
     
     draw.shift
     
-    i = @data.length - 1
     x = width - 1
     
-    if @max && i >= 0 && @data[i]
-      temp = @data[i]
+    temp = get_last_data
+    if @max && temp
       
       len = height * temp / @max
       
@@ -97,15 +97,9 @@ class Temp
   def get_tick_per_draw
     4
   end
-  
-  def discard_data(maxlen)
-    if @data.length > maxlen
-      @data.slice!(0, @data.length - maxlen)
-    end
-  end
 
   def get_tooltip_text
-    temp = @data[@data.length - 1]
+    temp = get_last_data
     return nil unless temp
     sprintf('%.1f℃', temp)  # ℃ is U+2103
   end

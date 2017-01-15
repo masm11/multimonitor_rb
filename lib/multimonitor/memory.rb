@@ -18,10 +18,11 @@
 
 require 'multimonitor/draw'
 require 'multimonitor/color'
+require 'multimonitor/device_base'
 
-class Memory
-  def initialize
-    @data = []
+class Memory < DeviceBase
+  def initialize(width)
+    super(width, {})
   end
   
   def read_data
@@ -51,7 +52,7 @@ class Memory
       h = nil
     end
     
-    @data << h
+    push_data(h)
   end
   
   def draw_1(draw)
@@ -60,12 +61,10 @@ class Memory
     
     draw.shift
     
-    i = @data.length - 1
     x = width - 1
     
-    if i >= 0 && @data[i]
-      h = @data[i]
-      
+    h = get_last_data
+    if h
       total = h['total']
       free = h['free']
       buffers = h['buffers']
@@ -95,12 +94,6 @@ class Memory
   def get_tick_per_draw
     4
   end
-  
-  def discard_data(maxlen)
-    if @data.length > maxlen
-      @data.slice!(0, @data.length - maxlen)
-    end
-  end
 
   def size_text(size)
     return sprintf('%.1fGB', size / 1024.0 / 1024) if size >= 1024 * 1024
@@ -109,7 +102,7 @@ class Memory
   end
   
   def get_tooltip_text
-    h = @data[@data.length - 1]
+    h = get_last_data
     return nil unless h
     sprintf("Anon:%s\nBuffers:%s\nCached:%s\nKernel:%s",
             size_text(h['anon']),

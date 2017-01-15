@@ -212,7 +212,7 @@ class MultiMonitor
     @devices = []
     @d2d = {}	# drawable to device
     
-    @devices = device_list
+    @devices = device_list(width)
     
     box = Gtk::Box.new(orientation, 1)
     box.show
@@ -246,7 +246,6 @@ class MultiMonitor
         
         if tick_count % dev.dev.get_tick_per_draw == 0
           dev.dev.read_data
-          dev.dev.discard_data(width)
           
           dev.dev.draw_1(dev.draw)
           draw_dev(dev)
@@ -262,25 +261,25 @@ class MultiMonitor
   end
   
   private
-  def device_list
+  def device_list(width)
     list = []
     
-    dev = Device.new; dev.dev = Battery.new('0');      list << dev
-    dev = Device.new; dev.dev = CPUFreq.new('0');      list << dev
-    dev = Device.new; dev.dev = CPUFreq.new('1');      list << dev
-    dev = Device.new; dev.dev = CPUFreq.new('2');      list << dev
-    dev = Device.new; dev.dev = CPUFreq.new('3');      list << dev
-    dev = Device.new; dev.dev = LoadAvg.new('1');      list << dev
-    dev = Device.new; dev.dev = CPULoad.new('0');      list << dev
-    dev = Device.new; dev.dev = CPULoad.new('1');      list << dev
-    dev = Device.new; dev.dev = CPULoad.new('2');      list << dev
-    dev = Device.new; dev.dev = CPULoad.new('3');      list << dev
-    dev = Device.new; dev.dev = Network.new('wlp1s0'); list << dev
-    dev = Device.new; dev.dev = Network.new('lo');     list << dev
-    dev = Device.new; dev.dev = Memory.new;            list << dev
-    dev = Device.new; dev.dev = Swap.new('/dev/sda8'); list << dev
-    dev = Device.new; dev.dev = Disk.new('sda');       list << dev
-    dev = Device.new; dev.dev = Temp.new('0-coretemp-1');     list << dev
+    dev = Device.new; dev.dev = Battery.new('0', width);      list << dev
+    dev = Device.new; dev.dev = CPUFreq.new('0', width);      list << dev
+    dev = Device.new; dev.dev = CPUFreq.new('1', width);      list << dev
+    dev = Device.new; dev.dev = CPUFreq.new('2', width);      list << dev
+    dev = Device.new; dev.dev = CPUFreq.new('3', width);      list << dev
+    dev = Device.new; dev.dev = LoadAvg.new('1', width);      list << dev
+    dev = Device.new; dev.dev = CPULoad.new('0', width);      list << dev
+    dev = Device.new; dev.dev = CPULoad.new('1', width);      list << dev
+    dev = Device.new; dev.dev = CPULoad.new('2', width);      list << dev
+    dev = Device.new; dev.dev = CPULoad.new('3', width);      list << dev
+    dev = Device.new; dev.dev = Network.new('wlp1s0', width); list << dev
+    dev = Device.new; dev.dev = Network.new('lo', width);     list << dev
+    dev = Device.new; dev.dev = Memory.new(width);            list << dev
+    dev = Device.new; dev.dev = Swap.new('/dev/sda8', width); list << dev
+    dev = Device.new; dev.dev = Disk.new('sda', width);       list << dev
+    dev = Device.new; dev.dev = Temp.new('0-coretemp-1', width);     list << dev
     
     list
   end

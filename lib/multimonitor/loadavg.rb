@@ -18,10 +18,11 @@
 
 require 'multimonitor/draw'
 require 'multimonitor/color'
+require 'multimonitor/device_base'
 
-class LoadAvg
-  def initialize(dev)
-    @data = []
+class LoadAvg < DeviceBase
+  def initialize(dev, width)
+    super(width, -1)
     @dev = dev
   end
   
@@ -46,14 +47,14 @@ class LoadAvg
       #    p e
     end
     
-    @data << loadavg
+    push_data(loadavg)
   end
   
   def calc_max
     max = 1.0
-    for i in 0...@data.length
-      if @data[i] > max
-        max = @data[i]
+    @data.each do |loadavg|
+      if loadavg > max
+        max = loadavg
       end
     end
     
@@ -72,11 +73,10 @@ class LoadAvg
     
     draw.shift
     
-    i = @data.length - 1
     x = width - 1
     
-    if i >= 0 && @data[i] >= 0
-      loadavg = @data[i]
+    loadavg = get_last_data
+    if loadavg >= 0
       
       len = loadavg * height / max
       
@@ -103,8 +103,8 @@ class LoadAvg
     x = width - 1
     
     while x >= 0
-      if i >= 0 && @data[i] >= 0
-        loadavg = @data[i]
+      loadavg = @data[i]
+      if loadavg >= 0
         
         len = loadavg * height / max
         
@@ -123,7 +123,7 @@ class LoadAvg
       i -= 1
     end
   end
-
+  
   def get_label
     "Loadavg\n#{@dev}min"
   end
@@ -132,14 +132,8 @@ class LoadAvg
     16
   end
   
-  def discard_data(maxlen)
-    if @data.length > maxlen
-      @data.slice!(0, @data.length - maxlen)
-    end
-  end
-  
   def get_tooltip_text
-    loadavg = @data[@data.length - 1]
+    loadavg = get_last_data
     return nil unless loadavg >= 0
     sprintf('%.1f%%', loadavg * 100)
   end

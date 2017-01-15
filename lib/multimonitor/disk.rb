@@ -19,10 +19,11 @@
 
 require 'multimonitor/draw'
 require 'multimonitor/color'
+require 'multimonitor/device_base'
 
-class Disk
-  def initialize(dev)
-    @data = []
+class Disk < DeviceBase
+  def initialize(dev, width)
+    super(width, nil)
     @dev = dev
     @oldr = 0
     @oldw = 0
@@ -56,7 +57,7 @@ class Disk
       h = nil
     end
     
-    @data << h
+    push_data(h)
   end
   
   def draw_1(draw)
@@ -64,7 +65,7 @@ class Disk
     height = draw.height
     
     max = 1024
-    for h in @data
+    @data.each do |h|
       if h
         if max < h['r']
           max = h['r']
@@ -83,12 +84,10 @@ class Disk
     
     draw.shift
     
-    i = @data.length - 1
     x = width - 1
     
-    if i >= 0 && @data[i]
-      h = @data[i]
-      
+    h = get_last_data
+    if h
       r = h['r']
       w = h['w']
       r = 1 if r < 1
@@ -115,7 +114,7 @@ class Disk
     height = draw.height
     
     max = 1024
-    for h in @data
+    @data.each do |h|
       if h
         if max < h['r']
           max = h['r']
@@ -131,9 +130,8 @@ class Disk
     i = @data.length - 1
     x = width - 1
     while x >= 0
-      if i >= 0 && @data[i]
-        h = @data[i]
-        
+      h = @data[i]
+      if h
         r = h['r']
         w = h['w']
         r = 1 if r < 1
@@ -167,12 +165,6 @@ class Disk
     4
   end
   
-  def discard_data(maxlen)
-    if @data.length > maxlen
-      @data.slice!(0, @data.length - maxlen)
-    end
-  end
-  
   def bps_text(bps)
     return sprintf('%.1fGB/s', bps / 1000000000.0) if bps >= 1000000000
     return sprintf('%.1fMB/s', bps / 1000000.0) if bps >= 1000000
@@ -181,7 +173,7 @@ class Disk
   end
   
   def get_tooltip_text
-    h = @data[@data.length - 1]
+    h = get_last_data
     return nil unless h
     sprintf("Write:%s\nRead:%s",
             bps_text(h['w']), bps_text(h['r']))

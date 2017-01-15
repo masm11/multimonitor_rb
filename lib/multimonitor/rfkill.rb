@@ -18,11 +18,12 @@
 
 require 'multimonitor/draw'
 require 'multimonitor/color'
+require 'multimonitor/device_base'
 
-class RfKill
-  def initialize(n)
+class RfKill < DeviceBase
+  def initialize(n, width)
+    super(width, {})
     @n = n
-    @data = []
   end
   
   def read_data
@@ -52,7 +53,7 @@ class RfKill
       h = nil
     end
     
-    @data << h
+    push_data(h)
   end
   
   def draw_1(draw)
@@ -61,12 +62,10 @@ class RfKill
     
     draw.shift
     
-    i = @data.length - 1
     x = width - 1
     
-    if i >= 0 && @data[i]
-      h = @data[i]
-      
+    h = get_last_data
+    if h
       if h[:hard]
         color = COLOR_HARD
       elsif h[:soft]
@@ -91,14 +90,8 @@ class RfKill
     1
   end
   
-  def discard_data(maxlen)
-    if @data.length > maxlen
-      @data.slice!(0, @data.length - maxlen)
-    end
-  end
-  
   def get_tooltip_text
-    h = @data[@data.length - 1]
+    h = get_last_data
     return nil unless h
     sprintf("Hard:%s\nSoft:%s\nState:%s",
             h[:hard], h[:soft], h[:state])
