@@ -75,12 +75,13 @@ class Device
 end
 
 def draw_dev (dev, cr)
+  pixbuf = dev.draw.create_pixbuf
   cr.save do
-    pixbuf = dev.draw.create_pixbuf
     cr.set_source_pixbuf(pixbuf)
     cr.paint
-    pixbuf.unref
   end
+  pixbuf.unref
+  pixbuf = nil
   
   cr.show_pango_layout(dev.layout)
 end
@@ -249,6 +250,8 @@ class MultiMonitor
           dev.drawable.set_tooltip_text(tooltip)
         end
       end
+      
+      GC.start
       
       tick_count += 1
       true
