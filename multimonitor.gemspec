@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
                     'lib/multimonitor/color.rb',
                     'lib/multimonitor/cpufreq.rb',
                     'lib/multimonitor/cpuload.rb',
+                    'lib/multimonitor/device_base.rb',
                     'lib/multimonitor/disk.rb',
                     'lib/multimonitor/draw.rb',
                     'lib/multimonitor/loadavg.rb',
@@ -27,7 +28,7 @@ Gem::Specification.new do |s|
   s.extensions  << 'ext/extconf.rb'
   s.executables	<< 'multimonitor'
   s.homepage	= 'https://github.com/masm11/multimonitor'
-  s.license	= 'GPL'
+  s.license	= 'GPL-3.0'
   s.add_runtime_dependency 'gtk3', '~> 3.0', '>= 3.1.0'
   s.add_runtime_dependency 'network_interface', '~> 0.0', '>= 0.0.1'
 end
