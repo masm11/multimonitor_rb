@@ -47,8 +47,10 @@ rb_mpa_callback_finder(GIArgInfo *info)
     logger(namespace);
     logger(name);
     if (strcmp(namespace, "MatePanelApplet") == 0 && strcmp(name, "AppletFactoryCallback") == 0) {
+	g_base_info_unref(interface_info);
 	return rb_mpa_factory_callback;
     } else {
+	g_base_info_unref(interface_info);
 	return NULL;
     }
 }
